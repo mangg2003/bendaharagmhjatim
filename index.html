@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Manajemen Bendahara PW GMAH Jawa Timur</title>
+    <title>Bendahara PD GMH JATIM</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,20 +27,43 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #066585; 
         }
+
+        /* CSS Pengaturan Cetak LPJ */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #report-print-area, #report-print-area * {
+                visibility: visible;
+            }
+            #report-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            header, aside, .md\:hidden, button, .flex.gap-2 {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
+    <!-- Header dengan Ukuran Logo yang Kecil & Profesional -->
     <header class="bg-[#0880a7] text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-white p-2 rounded-full flex items-center justify-center w-10 h-10 shadow">
+                    <div class="bg-white p-1 rounded-full flex items-center justify-center w-10 h-10 shadow shrink-0">
                         <img src="Logo GMH.png" alt="Logo GMH JAWA TIMUR" class="w-full h-full object-contain">
                     </div>
                     <div>
-                        <h1 class="text-md sm:text-lg font-bold leading-tight">GMH JAWA TIMUR</h1>
-                        <p class="text-[10px] sm:text-xs text-blue-100">Sistem Keuangan Bendahara Daerah</p>
+                        <h1 class="text-sm sm:text-lg font-bold leading-tight tracking-wide">GMH JATIM</h1>
+                        <p class="text-[9px] sm:text-xs text-blue-100">Sistem Keuangan Bendahara Daerah</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -49,7 +72,7 @@
                         <p class="text-sm font-semibold text-amber-300"><i class="fa-solid fa-user-tie mr-1"></i> Bendahara PD</p>
                     </div>
                     <button id="mobile-menu-toggle" class="md:hidden text-white hover:text-amber-300 focus:outline-none">
-                        <i class="fa-solid fa-bars text-2xl"></i>
+                        <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
@@ -70,7 +93,7 @@
                 </button>
                 <button onclick="switchTab('dues')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="dues">
                     <i class="fa-solid fa-users-rectangle w-5 text-lg"></i>
-                    <span>Iuran PC Se-Jatim</span>
+                    <span>Iuran PC Se-JATIM</span>
                 </button>
                 <button onclick="switchTab('rab')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="rab">
                     <i class="fa-solid fa-list-check w-5 text-lg"></i>
@@ -80,9 +103,9 @@
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-lg"></i>
                     <span>Laporan Keuangan</span>
                 </button>
-                <button onclick="switchTab('ai-assistant')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="ai-assistant">
-                    <i class="fa-solid fa-wand-magic-sparkles w-5 text-lg text-amber-500"></i>
-                    <span>Asisten AI Keuangan</span>
+                <button onclick="switchTab('admin-panel')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="admin-panel">
+                    <i class="fa-solid fa-user-shield w-5 text-lg text-amber-500"></i>
+                    <span>Admin Bendahara</span>
                 </button>
             </div>
             
@@ -99,13 +122,14 @@
 
         <main class="flex-1 bg-white md:rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 min-h-[500px]">
             
+            <!-- Tab: Dashboard Utama -->
             <div id="page-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-gradient-to-tr from-[#0880a7] to-blue-700 text-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
                         <div class="absolute right-0 top-0 translate-x-3 -translate-y-3 opacity-15 text-9xl">
                             <i class="fa-solid fa-scale-balanced"></i>
                         </div>
-                        <span class="text-xs text-blue-100 uppercase tracking-wider font-semibold">Total Saldo Kas PW</span>
+                        <span class="text-xs text-blue-100 uppercase tracking-wider font-semibold">Total Saldo Kas Kas</span>
                         <h3 class="text-2xl sm:text-3xl font-extrabold mt-2" id="metric-balance">Rp 0</h3>
                         <p class="text-xs text-blue-200 mt-2"><i class="fa-solid fa-circle-arrow-up text-amber-300 mr-1"></i> Update otomatis dari buku kas</p>
                     </div>
@@ -133,22 +157,11 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                         <h4 class="font-bold text-gray-700 text-sm mb-4"><i class="fa-solid fa-chart-line text-[#0880a7] mr-2"></i>Arus Kas Bulan Ini</h4>
                         <div class="h-64 relative">
                             <canvas id="cashflow-chart"></canvas>
-                        </div>
-                    </div>
-                    <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <h4 class="font-bold text-gray-700 text-sm mb-4"><i class="fa-solid fa-chart-pie text-[#0880a7] mr-2"></i>Kategori Pengeluaran</h4>
-                            <div class="h-44 relative flex items-center justify-center">
-                                <canvas id="category-pie-chart"></canvas>
-                            </div>
-                        </div>
-                        <div class="text-center text-xs text-gray-400 mt-2">
-                            Alokasi Terbesar saat ini: <span id="highest-expense-cat" class="font-semibold text-[#0880a7]">-</span>
                         </div>
                     </div>
                 </div>
@@ -160,17 +173,17 @@
                             <button onclick="switchTab('transactions')" class="text-xs text-[#0880a7] font-semibold hover:underline">Semua Transaksi &rarr;</button>
                         </div>
                         <div class="space-y-3" id="recent-transactions-container">
-                            </div>
+                        </div>
                     </div>
 
                     <div class="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
                         <div>
                             <div class="flex items-center space-x-2 text-blue-900 font-bold mb-2">
                                 <i class="fa-solid fa-lightbulb"></i>
-                                <span>Tips Cepat Bendahara</span>
+                                <span>Tips Operasional Bendahara</span>
                             </div>
                             <p class="text-xs text-blue-950 leading-relaxed">
-                                Pastikan untuk selalu merekam kwitansi/bukti transfer iuran dari PC-PC Kabupaten/Kota. Anda dapat menggunakan fitur <b>Asisten AI</b> untuk merangkum arus kas ini langsung menjadi laporan naratif untuk dikirim ke Syura PW atau PB pusat!
+                                Pastikan berkas pendukung diunggah lengkap. Sekarang pembukuan mendukung multi-upload foto bukti transaksi untuk kebutuhan validasi laporan pertanggungjawaban yang akuntabel.
                             </p>
                         </div>
                         <div class="grid grid-cols-2 gap-3 mt-4">
@@ -185,11 +198,12 @@
                 </div>
             </div>
 
+            <!-- Tab: Pencatatan Buku Kas -->
             <div id="page-transactions" class="space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800">Buku Kas Utama PD GMH Jatim</h2>
-                        <p class="text-xs text-gray-500">Catat dan pantau seluruh pemasukan, pengeluaran, serta hibah GMH JATIM.</p>
+                        <h2 class="text-xl font-bold text-gray-800">Buku Kas Utama PD GMH JATIM</h2>
+                        <p class="text-xs text-gray-500">Catat dan pantau seluruh pemasukan dan pengeluaran GMH JATIM.</p>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="openAddTransactionModal('in')" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
@@ -203,14 +217,12 @@
 
                 <div class="bg-gray-50 p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div class="flex flex-1 flex-col sm:flex-row gap-3">
-                        <input type="text" id="tx-search" placeholder="Cari keterangan..." class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1">
-                        <select id="tx-type-filter" class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="tx-search" oninput="renderTransactions()" placeholder="Cari keterangan atau no ref..." class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1">
+                        <select id="tx-type-filter" onchange="renderTransactions()" class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="all">Semua Tipe</option>
                             <option value="in">Hanya Pemasukan</option>
                             <option value="out">Hanya Pengeluaran</option>
                         </select>
-                        <select id="tx-cat-filter" class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </select>
                     </div>
                     <button onclick="resetTxFilters()" class="text-xs text-gray-500 hover:text-blue-700 font-semibold"><i class="fa-solid fa-rotate-left mr-1"></i> Reset</button>
                 </div>
@@ -221,15 +233,14 @@
                             <tr>
                                 <th class="px-4 py-3 font-semibold text-gray-500">No. Ref</th>
                                 <th class="px-4 py-3 font-semibold text-gray-500">Tanggal</th>
-                                <th class="px-4 py-3 font-semibold text-gray-500">Kategori</th>
                                 <th class="px-4 py-3 font-semibold text-gray-500">Keterangan</th>
                                 <th class="px-4 py-3 font-semibold text-gray-500">Jumlah</th>
-                                <th class="px-4 py-3 font-semibold text-gray-500">Bukti</th>
+                                <th class="px-4 py-3 font-semibold text-gray-500">Bukti Berkas</th>
                                 <th class="px-4 py-3 font-semibold text-gray-500 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tx-table-body" class="divide-y divide-gray-100">
-                            </tbody>
+                        </tbody>
                     </table>
                     <div id="tx-empty-state" class="hidden p-8 text-center text-gray-500">
                         <i class="fa-solid fa-folder-open text-4xl mb-2 text-gray-300"></i>
@@ -238,22 +249,23 @@
                 </div>
             </div>
 
+            <!-- Tab: Iuran Bulanan (12 Bulan Penuh) -->
             <div id="page-dues" class="space-y-6 hidden">
                 <div>
-                    <h2 class="text-xl font-bold text-gray-800">Iuran Wajib PD GMH Jatim</h2>
+                    <h2 class="text-xl font-bold text-gray-800">Iuran Wajib PD GMH JATIM</h2>
                     <p class="text-xs text-gray-500">Pelacakan setoran iuran rutin bulanan dari Pengurus Cabang (Kabupaten/Kota) se-Jawa Timur.</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
                         <span class="text-[10px] uppercase font-bold text-amber-700">Target Bulanan PD</span>
-                        <h4 class="text-lg font-bold text-amber-950 mt-1" id="dues-target">Rp 1,000,000</h4>
-                        <p class="text-xs text-amber-800 mt-1">Rp 200,000 per Cabang aktif</p>
+                        <h4 class="text-lg font-bold text-amber-950 mt-1" id="dues-target">Rp 1,500,000</h4>
+                        <p class="text-xs text-amber-800 mt-1">Rp 100,000 per Cabang aktif</p>
                     </div>
                     <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                        <span class="text-[10px] uppercase font-bold text-blue-700">Realisasi Bulan Ini</span>
+                        <span class="text-[10px] uppercase font-bold text-blue-700">Realisasi Tahun Ini</span>
                         <h4 class="text-lg font-bold text-blue-950 mt-1" id="dues-current-realization">Rp 0</h4>
-                        <p class="text-xs text-blue-800 mt-1">Dari total cabang yang melunasi</p>
+                        <p class="text-xs text-blue-800 mt-1">Dari akumulasi seluruh bulan yang melunasi</p>
                     </div>
                     <div class="bg-gray-50 border border-gray-100 rounded-xl p-4">
                         <span class="text-[10px] uppercase font-bold text-gray-600">Total Cabang Aktif</span>
@@ -264,30 +276,37 @@
 
                 <div class="border border-gray-100 rounded-2xl overflow-hidden">
                     <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
-                        <h3 class="text-xs font-semibold text-gray-700 uppercase">Status Pembayaran Iuran Per Cabang (Tahun 2026)</h3>
-                        <span class="text-[10px] text-gray-400">Klik status bulan untuk mengubah (Lunas / Belum Lunas)</span>
+                        <h3 class="text-xs font-semibold text-gray-700 uppercase">Status Pembayaran Iuran Per Cabang (12 Bulan - Tahun 2026)</h3>
+                        <span class="text-[10px] text-gray-400">Klik status bulan untuk mengubah (Lunas / Belum)</span>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-100 text-xs">
+                        <table class="min-w-full divide-y divide-gray-100 text-center text-[11px]">
                             <thead class="bg-white">
                                 <tr>
-                                    <th class="px-4 py-3 font-semibold text-gray-500 text-left">Nama Cabang (PC)</th>
-                                    <th class="px-2 py-3 font-semibold text-gray-500 text-center">Jan</th>
-                                    <th class="px-2 py-3 font-semibold text-gray-500 text-center">Feb</th>
-                                    <th class="px-2 py-3 font-semibold text-gray-500 text-center">Mar</th>
-                                    <th class="px-2 py-3 font-semibold text-gray-500 text-center">Apr</th>
-                                    <th class="px-2 py-3 font-semibold text-gray-500 text-center">Mei</th>
-                                    <th class="px-2 py-3 font-semibold text-gray-500 text-center">Jun</th>
-                                    <th class="px-4 py-3 font-semibold text-gray-500 text-right">Total Setor</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-500 text-left min-w-[120px]">Nama Cabang (PC)</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Jan</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Feb</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Mar</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Apr</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Mei</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Jun</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Jul</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Agu</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Sep</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Okt</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Nov</th>
+                                    <th class="px-1 py-3 font-semibold text-gray-500">Des</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-500 text-right min-w-[100px]">Total Setor</th>
                                 </tr>
                             </thead>
-                            <tbody id="dues-table-body" class="divide-y divide-gray-100">
-                                </tbody>
+                            <tbody id="dues-table-body" class="divide-y divide-gray-100 bg-white">
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+            <!-- Tab: Perencanaan RAB Proyek -->
             <div id="page-rab" class="space-y-6 hidden">
                 <div class="flex justify-between items-center">
                     <div>
@@ -298,11 +317,10 @@
                         <i class="fa-solid fa-plus"></i> <span>Buat Proyek RAB</span>
                     </button>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="rab-container">
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="rab-container"></div>
             </div>
 
+            <!-- Tab: Laporan Pertanggungjawaban -->
             <div id="page-reports" class="space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
@@ -321,9 +339,9 @@
                     <div class="text-center space-y-2 border-b-2 border-double border-blue-800 pb-6">
                         <h3 class="text-lg font-bold uppercase tracking-wider text-blue-950">GERAKAN MAHASISWA HIDAYATULLAH</h3>
                         <h4 class="text-md font-extrabold uppercase text-[#0880a7]">PENGURUS DAERAH JAWA TIMUR</h4>
-                        <p class="text-xs text-gray-500">Sekretariat: Jl. Kejawan Putih Tambak, Mulyorejo, Surabaya, Jawa Timur | Telp: +62 812-3456-7890</p>
+                        <p class="text-xs text-gray-500">Sekretariat: Jl. Kejawan Putih Tambak, Mulyorejo, Surabaya, Jawa Timur | Telp: +62 821-4247-6196</p>
                         <div class="text-xs font-semibold bg-blue-50 text-[#0880a7] py-1 px-3 inline-block rounded-full mt-2">
-                            LAPORAN PERTANGGUNGJAWABAN KEUANGAN KAS BULAN JUNI 2026
+                            LAPORAN PERTANGGUNGJAWABAN KEUANGAN KAS TAHUNAN 2026
                         </div>
                     </div>
 
@@ -356,86 +374,77 @@
                                 <tr class="border-b border-gray-200">
                                     <th class="py-2 font-bold text-gray-700">Ref</th>
                                     <th class="py-2 font-bold text-gray-700">Tanggal</th>
-                                    <th class="py-2 font-bold text-gray-700">Kategori</th>
                                     <th class="py-2 font-bold text-gray-700">Keterangan</th>
                                     <th class="py-2 font-bold text-gray-700 text-right">Debit (Masuk)</th>
                                     <th class="py-2 font-bold text-gray-700 text-right">Kredit (Keluar)</th>
                                 </tr>
                             </thead>
                             <tbody id="rep-transactions-body" class="divide-y divide-gray-100">
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
 
                     <div class="pt-12 grid grid-cols-2 text-xs text-center">
                         <div class="space-y-16">
-                            <p>Mengetahui,<br><b>Ketua PD GMH Jawa Timur</b></p>
+                            <p>Mengetahui,<br><b>Ketua PD GMH JATIM</b></p>
                             <div>
                                 <p class="font-bold underline">Jaskia Nur, S.Pd.</p>
                                 <p class="text-gray-400 text-[10px]">NIM. 2022310013</p>
                             </div>
                         </div>
                         <div class="space-y-16">
-                            <p>Surabaya, 23 Juni 2026<br><b>Bendahara PD GMH Jawa Timur</b></p>
+                            <p>Surabaya, 23 Juni 2026<br><b>Bendahara PD GMH JATIM</b></p>
                             <div>
-                                <p class="font-bold underline" id="rep-treasurer-name">Haidar Ali</p>
-                                <p class="text-gray-400 text-[10px]">NRP. GMAH.JT.2026.004</p>
+                                <p class="font-bold underline" id="rep-treasurer-name">Haidar Ali Ahmad</p>
+                                <p class="text-gray-400 text-[10px]">NIM. 24112667</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="page-ai-assistant" class="space-y-6 hidden flex flex-col h-full">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-wand-magic-sparkles text-amber-500 mr-2"></i>Asisten AI Bendahara GMAH</h2>
-                    <p class="text-xs text-gray-500">Gunakan kecerdasan buatan untuk menganalisis data keuangan, menyusun strategi dana, atau menyusun naskah draf laporan untuk pimpinan organisasi.</p>
-                </div>
+         <!-- PERUBAHAN UTAMA: Tab Admin Bendahara Diubah Total Sesuai Gambar image_2949d.png -->
+            <div id="page-admin-panel" class="flex flex-col items-center justify-center min-h-[450px] p-4 bg-white">
+                <div class="max-w-md w-full bg-white border border-gray-100 rounded-3xl shadow-sm p-8 text-center space-y-6">
+                    
+                    <!-- Lingkaran Luar Icon Headset Layanan -->
+                  <div class="mx-auto flex items-center justify-center w-28 h-28 rounded-full bg-blue-50/70">
+    <div class="flex items-center justify-center w-20 h-20 rounded-full bg-white shadow-md text-4xl text-[#0880a7]">
+        <i class="fa-solid fa-headset"></i>
+    </div>
+</div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <button onclick="triggerAIQuickPrompt('analisis')" class="p-3 bg-blue-50 hover:bg-blue-100 border border-blue-100 text-blue-950 rounded-xl text-xs text-left transition flex flex-col justify-between">
-                        <span class="font-bold mb-1"><i class="fa-solid fa-magnifying-glass-chart mr-1"></i> Analisis Kesehatan Kas</span>
-                        <span class="text-[10px] text-blue-800">Evaluasi otomatis sisa kas dan pola pengeluaran saat ini.</span>
-                    </button>
-                    <button onclick="triggerAIQuickPrompt('draf')" class="p-3 bg-amber-50 hover:bg-amber-100 border border-amber-100 text-amber-950 rounded-xl text-xs text-left transition flex flex-col justify-between">
-                        <span class="font-bold mb-1"><i class="fa-solid fa-file-signature mr-1"></i> Buat Narasi Draf LPJ</span>
-                        <span class="text-[10px] text-amber-800">Draf narasi pengantar formal untuk rapat pertanggungjawaban.</span>
-                    </button>
-                    <button onclick="triggerAIQuickPrompt('saran')" class="p-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 text-indigo-950 rounded-xl text-xs text-left transition flex flex-col justify-between">
-                        <span class="font-bold mb-1"><i class="fa-solid fa-piggy-bank mr-1"></i> Ide Penggalangan Dana</span>
-                        <span class="text-[10px] text-indigo-800">Saran inovatif pencarian kas mandiri organisasi mahasiswa dakwah.</span>
-                    </button>
-                </div>
+                    <!-- Blok Teks Deskripsi -->
+                    <div class="space-y-3">
+                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Pusat Bantuan & Koordinasi Bendahara</h2>
+                        <p class="text-xs text-gray-500 leading-relaxed px-2">
+                            Jika Akhi memerlukan bantuan sinkronisasi akun, validasi token, atau konsultasi pelaporan keuangan tingkat daerah, silakan hubungi Admin Pusat melalui tautan di bawah.
+                        </p>
+                    </div>
 
-                <div class="border border-gray-200 rounded-2xl flex flex-col h-[400px] bg-gray-50 overflow-hidden">
-                    <div id="ai-messages-container" class="flex-1 p-4 overflow-y-auto space-y-4">
-                        <div class="flex items-start gap-3">
-                            <div class="bg-[#0880a7] text-white rounded-full p-2 w-8 h-8 flex items-center justify-center text-xs shrink-0 shadow">
-                                <i class="fa-solid fa-robot"></i>
-                            </div>
-                            <div class="bg-white rounded-2xl p-3 shadow-sm text-xs leading-relaxed max-w-[85%] border border-gray-100">
-                                <p class="font-bold text-[#0880a7] mb-1">Ukhuwah AI Assistant</p>
-                                Assalamu'alaikum Akhi Bendahara. Saya siap membantu Anda mengelola, menganalisis, dan melaporkan keuangan Pengurus Wilayah Gerakan Mahasiswa Hidayatullah Jawa Timur. 
-                                <br><br>
-                                Silakan ketik pertanyaan di bawah atau pilih tombol aksi cepat di atas untuk memulai analisis cerdas berdasarkan data kas Anda saat ini!
-                            </div>
+                    <!-- Blok Informasi Jam Operasional Kerja -->
+                    <div class="bg-gray-50/80 rounded-2xl p-4 border border-gray-100/50 text-left space-y-2">
+                        <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400 block">Jam Operasional Layanan:</span>
+                        <div class="flex items-center space-x-2 text-xs font-semibold text-slate-700">
+                            <i class="fa-regular fa-clock text-[#0880a7] text-sm"></i>
+                            <span>Senin - Sabtu <span class="text-gray-300 mx-1">|</span> 08:00 - 17:00 WIB</span>
                         </div>
                     </div>
 
-                    <div class="bg-white p-3 border-t border-gray-100 flex items-center gap-2">
-                        <input type="text" id="ai-input" placeholder="Tanyakan saran alokasi dana, analisis LPJ, dll..." class="flex-1 text-xs border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button onclick="sendChatMessage()" id="ai-send-btn" class="bg-[#0880a7] hover:bg-blue-700 text-white p-3 rounded-xl shadow transition">
-                            <i class="fa-solid fa-paper-plane"></i>
-                        </button>
-                    </div>
+                    <!-- Tombol Aksi Hubungi Melalui WhatsApp -->
+                    <a href="https://wa.me/6282142476196" target="_blank" class="w-full bg-[#0880a7] hover:bg-blue-700 text-white font-semibold text-xs py-3.5 px-4 rounded-xl shadow-md transition duration-200 flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                        <span>Hubungi WhatsApp Admin</span>
+                    </a>
+
                 </div>
             </div>
 
         </main>
     </div>
-
+    <!-- Modal Form Buku Kas (Mendukung Multi-Upload Beberapa Foto) -->
     <div id="transaction-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden animate-slide-up">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="bg-gradient-to-r from-[#0880a7] to-blue-900 px-6 py-4 text-white flex justify-between items-center">
                 <h3 id="modal-title" class="font-bold text-sm">Tambah Mutasi Buku Kas</h3>
                 <button onclick="closeTransactionModal()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -451,46 +460,40 @@
                     </div>
                     <div>
                         <label class="block text-xs text-gray-500 font-semibold mb-1">No. Referensi (Opsional)</label>
-                        <input type="text" id="form-tx-ref" placeholder="REF/GMAH-JT/..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="form-tx-ref" placeholder="REF/GMAH-JT..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs text-gray-500 font-semibold mb-1">Kategori Keuangan</label>
-                    <select id="form-tx-category" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </select>
                 </div>
 
                 <div>
                     <label class="block text-xs text-gray-500 font-semibold mb-1">Jumlah Nominal (Rp)</label>
-                    <input type="number" id="form-tx-amount" min="1" placeholder="cth: 200000" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="number" id="form-tx-amount" min="1" placeholder="cth: 100000" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <div>
                     <label class="block text-xs text-gray-500 font-semibold mb-1">Keterangan / Deskripsi</label>
-                    <textarea id="form-tx-notes" placeholder="cth: Iuran wajib Pengurus Cabang Surabaya bulan Mei" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"></textarea>
+                    <textarea id="form-tx-notes" placeholder="cth: Iuran wajib Cabang Surabaya..." required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"></textarea>
                 </div>
 
                 <div class="flex flex-col space-y-3 bg-blue-50 p-3 rounded-xl border border-blue-100 max-w-md">
-    
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" id="form-tx-receipt" onchange="toggleUploadField()" class="rounded text-[#0880a7] focus:ring-blue-500 w-4 h-4 cursor-pointer">
                         <label for="form-tx-receipt" class="text-[11px] text-blue-950 font-medium cursor-pointer select-none">
-                            Kwitansi / Bukti Fisik Transaksi Ada
+                            Kwitansi / Bukti Berkas Dokumen Ada
                         </label>
                     </div>
 
+                    <!-- FITUR INPUT: Diubah agar mensupport pengiriman beberapa berkas foto sekaligus (multiple) -->
                     <div id="upload-container" class="hidden border border-dashed border-blue-300 bg-white p-3 rounded-lg flex flex-col items-center justify-center transition-all duration-300">
                         <label for="file-upload" class="cursor-pointer flex flex-col items-center space-y-1 w-full text-center">
-                            <svg class="w-6 h-6 text-[#0880a7]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                            </svg>
-                            <span class="text-[11px] font-medium text-[#0880a7]">Klik untuk unggah atau seret file ke sini</span>
-                            <span class="text-[9px] text-gray-400">PNG, JPG, PDF (Maks. 2MB)</span>
+                            <i class="fa-solid fa-images text-[#0880a7] text-xl"></i>
+                            <span class="text-[11px] font-medium text-[#0880a7]">Klik untuk memilih beberapa foto bukti</span>
+                            <span class="text-[9px] text-gray-400">Dapat memilih lebih dari 1 file gambar (Maks. 2MB)</span>
                         </label>
-                        <input id="file-upload" type="file" class="hidden" accept="image/*,.pdf" onchange="displayFileName(this)">
+                        <input id="file-upload" type="file" class="hidden" accept="image/*" multiple onchange="displayMultipleFileNames(this)">
                         
-                        <div id="file-name-preview" class="text-[10px] text-[#0880a7] mt-2 font-medium hidden"></div>
+                        <!-- List Wrapper Pratinjau Kumpulan Nama Gambar -->
+                        <div id="file-name-preview" class="text-[10px] text-left text-blue-900 mt-2 bg-blue-50 p-2 rounded-lg w-full font-medium hidden space-y-1 border border-blue-100">
+                        </div>
                     </div>
                 </div>
 
@@ -502,6 +505,7 @@
         </div>
     </div>
 
+    <!-- Modal Form RAB -->
     <div id="rab-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="bg-gradient-to-r from-[#0880a7] to-blue-900 px-6 py-4 text-white flex justify-between items-center">
@@ -538,11 +542,13 @@
         </div>
     </div>
 
+    <!-- Komponen Toast Toast -->
     <div id="toast" class="fixed bottom-4 right-4 bg-blue-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center space-x-2 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
         <i class="fa-solid fa-circle-check text-amber-400"></i>
         <span id="toast-text" class="text-xs font-medium">Sukses menyimpan data</span>
     </div>
 
+    <!-- Bottom Navigation Mobile -->
     <div class="md:hidden sticky bottom-0 bg-white border-t border-gray-100 flex justify-around items-center h-14 text-gray-500 text-[10px] py-1 shadow-inner z-30">
         <button onclick="switchTab('dashboard')" class="flex flex-col items-center justify-center space-y-1 text-[#0880a7] font-bold" data-tab-mobile="dashboard">
             <i class="fa-solid fa-chart-pie text-lg"></i>
@@ -560,94 +566,106 @@
             <i class="fa-solid fa-list-check text-lg"></i>
             <span>RAB</span>
         </button>
-        <button onclick="switchTab('ai-assistant')" class="flex flex-col items-center justify-center space-y-1" data-tab-mobile="ai-assistant">
-            <i class="fa-solid fa-wand-magic-sparkles text-lg text-amber-500"></i>
-            <span>AI Asisten</span>
+        <button onclick="switchTab('admin-panel')" class="flex flex-col items-center justify-center space-y-1" data-tab-mobile="admin-panel">
+            <i class="fa-solid fa-user-shield text-lg text-amber-500"></i>
+            <span>Admin</span>
         </button>
     </div>
 
     <script>
-        // --- DATA INITIALIZATION ---
-        let transactions = [
-            { id: "TX-101", date: "2026-06-01", type: "in", category: "Iuran Pengurus Cabang", amount: 500000, notes: "Iuran Wajib Cabang PC Surabaya - Mei", refNum: "REF/GMAH-JT/2026/01", receipt: true },
-            { id: "TX-102", date: "2026-06-02", type: "in", category: "Sponsorship & Hibah", amount: 2500000, notes: "Hibah Pembinaan Dakwah dari Laznas Baitul Maal Hidayatullah (BMH) Jatim", refNum: "REF/GMAH-JT/2026/02", receipt: true },
-            { id: "TX-103", date: "2026-06-05", type: "out", category: "Agenda Organisasi & Rapat", amount: 450000, notes: "Sewa Aula Mini & Konsumsi Rapat Persiapan Rakerwil", refNum: "REF/GMAH-JT/2026/03", receipt: true },
-            { id: "TX-104", date: "2026-06-08", type: "in", category: "Iuran Pengurus Cabang", amount: 500000, notes: "Iuran Wajib Cabang PC Malang - Mei", refNum: "REF/GMAH-JT/2026/04", receipt: true },
-            { id: "TX-105", date: "2026-06-10", type: "out", category: "Syiar & Media Dakwah", amount: 350000, notes: "Biaya Domain Website & Akun Premium Zoom PW Jatim", refNum: "REF/GMAH-JT/2026/05", receipt: true },
-            { id: "TX-106", date: "2026-06-12", type: "out", category: "Peralatan & Administrasi", amount: 150000, notes: "Cetak Kop Surat PW, Stempel baru, & ATK Kantor PW", refNum: "REF/GMAH-JT/2026/06", receipt: true },
-            { id: "TX-107", date: "2026-06-15", type: "in", category: "Iuran Pengurus Cabang", amount: 500000, notes: "Iuran Wajib Cabang PC Jember - Mei", refNum: "REF/GMAH-JT/2026/07", receipt: true },
-            { id: "TX-108", date: "2026-06-18", type: "out", category: "Kaderisasi & Diklat", amount: 1200000, notes: "Bantuan awal panitia DIKLAT SAR Mahasiswa Baru di Pacet Mojokerto", refNum: "REF/GMAH-JT/2026/08", receipt: true },
-            { id: "TX-109", date: "2026-06-20", type: "in", category: "Donasi & Infak", amount: 1000000, notes: "Infak Pengikat Hati dari Pembina & Sesepuh PW Hidayatullah Jatim", refNum: "REF/GMAH-JT/2026/09", receipt: false }
+        // --- DATA STATE MANAGEMENT (LOCALSTORAGE) ---
+        let defaultTransactions = [
+            { id: "TX-101", date: "2026-06-01", type: "in", amount: 500000, notes: "Iuran Wajib Cabang PC Surabaya - Mei", refNum: "REF/GMAH-JT/2026/01", receipt: true, picCount: 1 },
+            { id: "TX-102", date: "2026-06-02", type: "in", amount: 2500000, notes: "Hibah Pembinaan Dakwah dari Laznas Baitul Maal Hidayatullah (BMH) Jatim", refNum: "REF/GMAH-JT/2026/02", receipt: true, picCount: 2 },
+            { id: "TX-103", date: "2026-06-05", type: "out", amount: 450000, notes: "Sewa Aula Mini & Konsumsi Rapat Persiapan Rakerwil", refNum: "REF/GMAH-JT/2026/03", receipt: true, picCount: 1 },
+            { id: "TX-104", date: "2026-06-08", type: "in", amount: 500000, notes: "Iuran Wajib Cabang PC Malang - Mei", refNum: "REF/GMAH-JT/2026/04", receipt: true, picCount: 1 },
+            { id: "TX-105", date: "2026-06-10", type: "out", amount: 350000, notes: "Biaya Domain Website & Akun Premium Zoom PW Jatim", refNum: "REF/GMAH-JT/2026/05", receipt: true, picCount: 1 },
+            { id: "TX-106", date: "2026-06-12", type: "out", amount: 150000, notes: "Cetak Kop Surat PW, Stempel baru, & ATK Kantor PW", refNum: "REF/GMAH-JT/2026/06", receipt: true, picCount: 3 },
+            { id: "TX-107", date: "2026-06-15", type: "in", amount: 500000, notes: "Iuran Wajib Cabang PC Jember - Mei", refNum: "REF/GMAH-JT/2026/07", receipt: true, picCount: 1 },
+            { id: "TX-108", date: "2026-06-18", type: "out", amount: 1200000, notes: "Bantuan awal panitia DIKLAT SAR Mahasiswa Baru di Pacet Mojokerto", refNum: "REF/GMAH-JT/2026/08", receipt: true, picCount: 2 },
+            { id: "TX-109", date: "2026-06-20", type: "in", amount: 1000000, notes: "Infak Pengikat Hati dari Pembina & Sesepuh PW Hidayatullah Jatim", refNum: "REF/GMAH-JT/2026/09", receipt: false, picCount: 0 }
         ];
 
-        let branchDues = [
-            { id: "PC-SBY", name: "PC Surabaya", jan: true, feb: true, mar: true, apr: true, mei: true, jun: true },
-            { id: "PC-MLG", name: "PC Malang", jan: true, feb: true, mar: true, apr: true, mei: true, jun: false },
-            { id: "PC-JMB", name: "PC Jember", jan: true, feb: true, mar: true, apr: false, mei: true, jun: false },
-            { id: "PC-KDR", name: "PC Kediri", jan: true, feb: true, mar: false, apr: false, mei: false, jun: false },
-            { id: "PC-MDI", name: "PC Madiun", jan: true, feb: false, mar: false, apr: false, mei: false, jun: false },
-            { id: "PC-SDA", name: "PC Sidoarjo", jan: true, feb: true, mar: true, apr: true, mei: false, jun: false },
-            { id: "PC-GRK", name: "PC Gresik", jan: true, feb: true, mar: false, apr: false, mei: false, jun: false }
+        let defaultBranchDues = [
+            { id: "PC-SBY", name: "PC Surabaya", jan: true, feb: true, mar: true, apr: true, mei: true, jun: true, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
+            { id: "PC-MLG", name: "PC Malang", jan: true, feb: true, mar: true, apr: true, mei: true, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
+            { id: "PC-JMB", name: "PC Jember", jan: true, feb: true, mar: true, apr: false, mei: true, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
+            { id: "PC-KDR", name: "PC Kediri", jan: true, feb: true, mar: false, apr: false, mei: false, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
+            { id: "PC-MDI", name: "PC Madiun", jan: true, feb: false, mar: false, apr: false, mei: false, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
+            { id: "PC-SDA", name: "PC Sidoarjo", jan: true, feb: true, mar: true, apr: true, mei: false, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
+            { id: "PC-GRK", name: "PC Gresik", jan: true, feb: true, mar: false, apr: false, mei: false, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false }
         ];
 
-        let rabProjects = [
+        let defaultRABProjects = [
             { id: "RAB-01", name: "DIKLAT SAR Kader Jatim (Pacet)", target: 6000000, allocated: 2500000, spent: 1200000 },
             { id: "RAB-02", name: "RAKERWIL IX GMAH Jawa Timur", target: 4000000, allocated: 1500000, spent: 450000 },
             { id: "RAB-03", name: "Safari Dakwah Pesisir Selatan", target: 5000000, allocated: 1000000, spent: 0 }
         ];
 
-        const incomeCategories = ["Iuran Pengurus Cabang", "Donasi & Infak", "Sponsorship & Hibah", "Pencarian Dana Mandiri", "Pemasukan Lainnya"];
-        const expenseCategories = ["Agenda Organisasi & Rapat", "Kaderisasi & Diklat", "Syiar & Media Dakwah", "Peralatan & Administrasi", "Transportasi & Operasional", "Bantuan Sosisal / Dakwah"];
+        let transactions = JSON.parse(localStorage.getItem('gmah_transactions')) || defaultTransactions;
+        let branchDues = JSON.parse(localStorage.getItem('gmah_dues')) || defaultBranchDues;
+        let rabProjects = JSON.parse(localStorage.getItem('gmah_rab')) || defaultRABProjects;
 
         let currentTab = "dashboard";
         let cashflowChartObj = null;
-        let pieChartObj = null;
+        let adminRatioChartObj = null;
 
-        // Mendapatkan format tanggal lokal hari ini secara dinamis untuk form modal
         const hariIniGlobal = new Date();
         const tahun = hariIniGlobal.getFullYear();
         const bulan = String(hariIniGlobal.getMonth() + 1).padStart(2, '0');
         const tgl = String(hariIniGlobal.getDate()).padStart(2, '0');
         const tanggalFormat = `${tahun}-${bulan}-${tgl}`;
 
+        function saveToLocalStorage() {
+            localStorage.setItem('gmah_transactions', JSON.stringify(transactions));
+            localStorage.setItem('gmah_dues', JSON.stringify(branchDues));
+            localStorage.setItem('gmah_rab', JSON.stringify(rabProjects));
+        }
+
         window.onload = function() {
-            // Update teks Hari & Tanggal secara otomatis di header web
             const hariIni = new Date();
-            const opsiFormat = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long',   
-                day: 'numeric'   
-            };
+            const opsiFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const tanggalFormatIndo = hariIni.toLocaleDateString('id-ID', opsiFormat);
             document.getElementById('current-date-el').innerText = tanggalFormatIndo;
             
-            // Build elements
-            populateTxFilters();
             renderDashboard();
             renderTransactions();
             renderDues();
             renderRAB();
             renderReports();
+            renderAdminPanel();
             
-            // Mobile navigation handler
             document.getElementById("mobile-menu-toggle").onclick = function() {
                 const sidebar = document.getElementById("sidebar");
                 sidebar.classList.toggle("hidden");
-                sidebar.classList.toggle("w-full");
-                sidebar.classList.toggle("absolute");
-                sidebar.classList.toggle("z-40");
-                sidebar.classList.toggle("left-0");
-                sidebar.classList.toggle("right-0");
-                sidebar.classList.toggle("bg-white");
-                sidebar.classList.toggle("p-6");
             };
+        }
+
+        // FITUR BARU: Pratinjau Kumpulan Berkas Foto Multi-Upload
+        function displayMultipleFileNames(input) {
+            const preview = document.getElementById('file-name-preview');
+            preview.innerHTML = '';
+            if (input.files && input.files.length > 0) {
+                preview.classList.remove('hidden');
+                let header = document.createElement('p');
+                header.className = "font-bold border-b border-blue-200 pb-1 text-blue-950 mb-1 flex items-center justify-between";
+                header.innerHTML = `<span>📂 Terpilih (${input.files.length} Foto Berkas)</span>`;
+                preview.appendChild(header);
+
+                Array.from(input.files).forEach((file, idx) => {
+                    let fileRow = document.createElement('div');
+                    fileRow.className = "flex items-center text-[9px] text-gray-700 truncate space-x-1";
+                    fileRow.innerHTML = `<i class="fa-solid fa-image text-[#0880a7]"></i> <span>${idx+1}. ${file.name} (${(file.size/1024).toFixed(1)} KB)</span>`;
+                    preview.appendChild(fileRow);
+                });
+            } else {
+                preview.classList.add('hidden');
+            }
         }
 
         function toggleUploadField() {
             const checkbox = document.getElementById('form-tx-receipt');
             const uploadContainer = document.getElementById('upload-container');
-            
             if (checkbox.checked) {
                 uploadContainer.classList.remove('hidden');
             } else {
@@ -657,32 +675,17 @@
             }
         }
 
-        function displayFileName(input) {
-            const preview = document.getElementById('file-name-preview');
-            if (input.files && input.files[0]) {
-                preview.innerText = `📄 File terpilih: ${input.files[0].name}`;
-                preview.classList.remove('hidden');
-            } else {
-                preview.classList.add('hidden');
-            }
-        }
-
-        // Tab routing helper
         function switchTab(tabId) {
             currentTab = tabId;
-            
-            // Hide all tab content
-            const tabs = ['dashboard', 'transactions', 'dues', 'rab', 'reports', 'ai-assistant'];
+            const tabs = ['dashboard', 'transactions', 'dues', 'rab', 'reports', 'admin-panel'];
             tabs.forEach(t => {
                 const el = document.getElementById(`page-${t}`);
                 if (el) el.classList.add('hidden');
             });
             
-            // Show target
             const activeEl = document.getElementById(`page-${tabId}`);
             if (activeEl) activeEl.classList.remove('hidden');
 
-            // Set active class styling in sidebar
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 if (btn.getAttribute('data-tab') === tabId) {
                     btn.classList.add('bg-blue-50', 'text-[#0880a7]');
@@ -693,40 +696,26 @@
                 }
             });
 
-            // Set active class styling in mobile bottom bar
-            document.querySelectorAll('[data-tab-mobile]').forEach(btn => {
-                if (btn.getAttribute('data-tab-mobile') === tabId) {
-                    btn.classList.add('text-[#0880a7]', 'font-bold');
-                } else {
-                    btn.classList.remove('text-[#0880a7]', 'font-bold');
-                }
-            });
-
-            // Refresh dashboards or charts if needed
             if (tabId === 'dashboard') {
                 renderDashboard();
             } else if (tabId === 'reports') {
                 renderReports();
+            } else if (tabId === 'admin-panel') {
+                renderAdminPanel();
             }
 
-            // Close responsive menu if toggled on mobile
             const sidebar = document.getElementById("sidebar");
-            if (!sidebar.classList.contains("hidden") && window.innerWidth < 768) {
-                sidebar.classList.add("hidden");
-            }
+            if (window.innerWidth < 768) sidebar.classList.add("hidden");
         }
 
         function showToast(message, isSuccess = true) {
             const toast = document.getElementById("toast");
             const toastText = document.getElementById("toast-text");
             toastText.innerText = message;
-            
             toast.className = `fixed bottom-4 right-4 text-white px-4 py-3 rounded-xl shadow-lg flex items-center space-x-2 z-50 transform transition-all duration-300 pointer-events-auto ${isSuccess ? 'bg-blue-800' : 'bg-red-800'}`;
             toast.classList.remove('translate-y-20', 'opacity-0');
-
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0');
-                toast.classList.add('pointer-events-none');
             }, 3000);
         }
 
@@ -734,7 +723,6 @@
             return "Rp " + parseFloat(num).toLocaleString('id-ID');
         }
 
-        // --- RENDERING HANDLERS ---
         function renderDashboard() {
             let incomesSum = transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
             let expensesSum = transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
@@ -750,7 +738,6 @@
 
             const recentContainer = document.getElementById('recent-transactions-container');
             recentContainer.innerHTML = '';
-            
             const sortedTx = [...transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
             
             sortedTx.forEach(tx => {
@@ -763,7 +750,7 @@
                         </div>
                         <div>
                             <p class="font-bold text-gray-800">${tx.notes}</p>
-                            <p class="text-[10px] text-gray-400">${new Date(tx.date).toLocaleDateString('id-ID')} &bull; ${tx.category}</p>
+                            <p class="text-[10px] text-gray-400">${new Date(tx.date).toLocaleDateString('id-ID')}</p>
                         </div>
                     </div>
                     <span class="font-bold ${tx.type === 'in' ? 'text-blue-700' : 'text-red-600'}">
@@ -773,20 +760,13 @@
                 recentContainer.appendChild(item);
             });
 
-            let expensesByCategory = {};
-            transactions.filter(t => t.type === 'out').forEach(tx => {
-                expensesByCategory[tx.category] = (expensesByCategory[tx.category] || 0) + tx.amount;
-            });
-            let topCat = Object.keys(expensesByCategory).reduce((a, b) => expensesByCategory[a] > expensesByCategory[b] ? a : b, "-");
-            document.getElementById('highest-expense-cat').innerText = topCat;
-
             buildCashflowChart();
-            buildCategoryPieChart(expensesByCategory);
         }
 
-        // --- CHART BUILDERS ---
         function buildCashflowChart() {
-            const ctx = document.getElementById('cashflow-chart').getContext('2d');
+            const canvas = document.getElementById('cashflow-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
             if (cashflowChartObj) cashflowChartObj.destroy();
 
             let dates = [];
@@ -826,96 +806,27 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: {
-                            ticks: { font: { size: 9 } },
-                            grid: { color: 'rgba(0,0,0,0.03)' }
-                        },
-                        x: {
-                            ticks: { font: { size: 9 } },
-                            grid: { display: false }
-                        }
+                        y: { ticks: { font: { size: 9 } }, grid: { color: 'rgba(0,0,0,0.03)' } },
+                        x: { ticks: { font: { size: 9 } }, grid: { display: false } }
                     }
                 }
             });
-        }
-
-        function buildCategoryPieChart(expenseCategoriesData) {
-            const ctx = document.getElementById('category-pie-chart').getContext('2d');
-            if (pieChartObj) pieChartObj.destroy();
-
-            const labels = Object.keys(expenseCategoriesData);
-            const data = Object.values(expenseCategoriesData);
-
-            if (!labels.length) {
-                labels.push("Belum ada pengeluaran");
-                data.push(1);
-            }
-
-            pieChartObj = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: [
-                            '#ef4444', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'bottom',
-                            labels: {
-                                font: { size: 9 },
-                                boxWidth: 10
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // --- TRANSACTIONS BOOK LEDGER LOGIC ---
-        function populateTxFilters() {
-            const selectEl = document.getElementById('tx-cat-filter');
-            selectEl.innerHTML = '<option value="all">Semua Kategori</option>';
-            
-            const allCats = [...incomeCategories, ...expenseCategories];
-            allCats.forEach(cat => {
-                selectEl.innerHTML += `<option value="${cat}">${cat}</option>`;
-            });
-
-            document.getElementById('tx-search').addEventListener('input', renderTransactions);
-            document.getElementById('tx-type-filter').addEventListener('change', renderTransactions);
-            document.getElementById('tx-cat-filter').addEventListener('change', renderTransactions);
-        }
-
-        function resetTxFilters() {
-            document.getElementById('tx-search').value = '';
-            document.getElementById('tx-type-filter').value = 'all';
-            document.getElementById('tx-cat-filter').value = 'all';
-            renderTransactions();
         }
 
         function renderTransactions() {
             const query = document.getElementById('tx-search').value.toLowerCase();
             const typeFilter = document.getElementById('tx-type-filter').value;
-            const catFilter = document.getElementById('tx-cat-filter').value;
             const tbody = document.getElementById('tx-table-body');
             const emptyState = document.getElementById('tx-empty-state');
 
             tbody.innerHTML = '';
 
             let filtered = transactions.filter(tx => {
-                const matchQuery = tx.notes.toLowerCase().includes(query) || tx.refNum.toLowerCase().includes(query);
+                const notesMatch = tx.notes ? tx.notes.toLowerCase().includes(query) : false;
+                const refMatch = tx.refNum ? tx.refNum.toLowerCase().includes(query) : false;
+                const matchQuery = notesMatch || refMatch;
                 const matchType = typeFilter === 'all' || tx.type === typeFilter;
-                const matchCat = catFilter === 'all' || tx.category === catFilter;
-                return matchQuery && matchType && matchCat;
+                return matchQuery && matchType;
             });
 
             filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -927,18 +838,21 @@
                 filtered.forEach(tx => {
                     const row = document.createElement('tr');
                     row.className = "hover:bg-gray-50 transition";
+                    
+                    // Render status multi file berkas foto bukti fisik
+                    let picBadge = tx.picCount && tx.picCount > 0 ? 
+                        `<span class="text-emerald-700 font-semibold" title="Ada berkas pendukung"><i class="fa-solid fa-square-check"></i> ${tx.picCount} Foto</span>` : 
+                        `<span class="text-amber-500 font-medium" title="Kwitansi Belum Dilampirkan"><i class="fa-solid fa-triangle-exclamation"></i> Kosong</span>`;
+
                     row.innerHTML = `
                         <td class="px-4 py-3 text-[11px] font-mono text-gray-500">${tx.refNum || '-'}</td>
                         <td class="px-4 py-3 font-medium text-gray-600">${new Date(tx.date).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: '2-digit'})}</td>
-                        <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-[10px] font-semibold ${tx.type === 'in' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}">${tx.category}</span></td>
                         <td class="px-4 py-3 font-semibold text-gray-800 max-w-xs truncate" title="${tx.notes}">${tx.notes}</td>
                         <td class="px-4 py-3 font-bold ${tx.type === 'in' ? 'text-blue-700' : 'text-red-600'}">${tx.type === 'in' ? '+' : '-'}${formatRupiah(tx.amount)}</td>
-                        <td class="px-4 py-3">
-                            ${tx.receipt ? '<span class="text-blue-600" title="Kwitansi Lengkap"><i class="fa-solid fa-circle-check"></i> Ada</span>' : '<span class="text-amber-500" title="Belum Dilampirkan"><i class="fa-solid fa-circle-xmark"></i> Belum</span>'}
-                        </td>
+                        <td class="px-4 py-3">${tx.receipt ? picBadge : '<span class="text-gray-400">N/A</span>'}</td>
                         <td class="px-4 py-3 text-center flex items-center justify-center space-x-2">
-                            <button onclick="editTransaction('${tx.id}')" class="text-gray-400 hover:text-blue-700 p-1" title="Edit Transaksi"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteTransaction('${tx.id}')" class="text-gray-400 hover:text-red-600 p-1" title="Hapus"><i class="fa-solid fa-trash-can"></i></button>
+                            <button onclick="editTransaction('${tx.id}')" class="text-gray-400 hover:text-blue-700 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteTransaction('${tx.id}')" class="text-gray-400 hover:text-red-600 p-1"><i class="fa-solid fa-trash-can"></i></button>
                         </td>
                     `;
                     tbody.appendChild(row);
@@ -955,15 +869,11 @@
             document.getElementById('form-tx-amount').value = '';
             document.getElementById('form-tx-notes').value = '';
             document.getElementById('form-tx-receipt').checked = true;
-
-            const selectEl = document.getElementById('form-tx-category');
-            selectEl.innerHTML = '';
-            const list = type === 'in' ? incomeCategories : expenseCategories;
-            list.forEach(c => {
-                selectEl.innerHTML += `<option value="${c}">${c}</option>`;
-            });
-
+            document.getElementById('file-upload').value = '';
+            document.getElementById('file-name-preview').innerHTML = '';
+            document.getElementById('file-name-preview').classList.add('hidden');
             document.getElementById('transaction-modal').classList.remove('hidden');
+            toggleUploadField();
         }
 
         function editTransaction(id) {
@@ -978,15 +888,11 @@
             document.getElementById('form-tx-amount').value = tx.amount;
             document.getElementById('form-tx-notes').value = tx.notes;
             document.getElementById('form-tx-receipt').checked = tx.receipt;
-
-            const selectEl = document.getElementById('form-tx-category');
-            selectEl.innerHTML = '';
-            const list = tx.type === 'in' ? incomeCategories : expenseCategories;
-            list.forEach(c => {
-                selectEl.innerHTML += `<option value="${c}" ${c === tx.category ? 'selected' : ''}>${c}</option>`;
-            });
-
+            document.getElementById('file-upload').value = '';
+            document.getElementById('file-name-preview').innerHTML = '';
+            document.getElementById('file-name-preview').classList.add('hidden');
             document.getElementById('transaction-modal').classList.remove('hidden');
+            toggleUploadField();
         }
 
         function closeTransactionModal() {
@@ -999,23 +905,28 @@
             const type = document.getElementById('form-tx-type').value;
             const date = document.getElementById('form-tx-date').value;
             const refNum = document.getElementById('form-tx-ref').value;
-            const category = document.getElementById('form-tx-category').value;
             const amount = parseFloat(document.getElementById('form-tx-amount').value);
             const notes = document.getElementById('form-tx-notes').value;
             const receipt = document.getElementById('form-tx-receipt').checked;
+            
+            // Cek kuantitas file yang diupload secara simultan
+            const fileInput = document.getElementById('file-upload');
+            let picCount = fileInput.files ? fileInput.files.length : 0;
 
             if (id) {
                 const index = transactions.findIndex(t => t.id === id);
                 if (index !== -1) {
-                    transactions[index] = { id, date, type, category, amount, notes, refNum, receipt };
+                    let oldPicCount = transactions[index].picCount || 0;
+                    transactions[index] = { id, date, type, amount, notes, refNum, receipt, picCount: picCount > 0 ? picCount : oldPicCount };
                     showToast("Mutasi kas berhasil diperbarui");
                 }
             } else {
                 const newId = "TX-" + (transactions.length + 101);
-                transactions.push({ id: newId, date, type, category, amount, notes, refNum, receipt });
+                transactions.push({ id: newId, date, type, amount, notes, refNum, receipt, picCount });
                 showToast("Pencatatan kas baru disimpan");
             }
 
+            saveToLocalStorage();
             closeTransactionModal();
             renderDashboard();
             renderTransactions();
@@ -1026,34 +937,40 @@
             if(confirm(`Apakah Anda yakin ingin menghapus transaksi ${id}?`)) {
                 transactions = transactions.filter(t => t.id !== id);
                 showToast("Transaksi berhasil dihapus");
+                saveToLocalStorage();
                 renderDashboard();
                 renderTransactions();
                 renderReports();
             }
         }
 
-        // --- IURAN ANGGOTA BRANCH DUES LOGIC ---
+        function resetTxFilters() {
+            document.getElementById('tx-search').value = '';
+            document.getElementById('tx-type-filter').value = 'all';
+            renderTransactions();
+        }
+
         function renderDues() {
             const tbody = document.getElementById('dues-table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
-
             let totalDuesInflow = 0;
 
             branchDues.forEach(branch => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-50 transition";
+                tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
                 
                 let monthsPaid = 0;
-                const months = ['jan', 'feb', 'mar', 'apr', 'mei', 'jun'];
+                const months = ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'agu', 'sep', 'okt', 'nov', 'des'];
                 months.forEach(m => { if(branch[m]) monthsPaid++; });
-                let branchTotal = monthsPaid * 200000;
+                let branchTotal = monthsPaid * 100000;
                 totalDuesInflow += branchTotal;
 
                 let monthsHTML = '';
                 months.forEach(m => {
                     monthsHTML += `
-                        <td class="px-2 py-3 text-center">
-                            <button onclick="toggleDueStatus('${branch.id}', '${m}')" class="px-2 py-1 rounded text-[10px] font-bold w-12 transition duration-150 ${branch[m] ? 'bg-blue-100 text-blue-800 hover:bg-blue-200' : 'bg-red-100 text-red-800 hover:bg-red-200'}">
+                        <td class="px-1 py-3 text-center">
+                            <button onclick="toggleDueStatus('${branch.id}', '${m}')" class="px-1 py-0.5 rounded text-[9px] font-bold w-10 transition duration-150 ${branch[m] ? 'bg-blue-100 text-blue-800 hover:bg-blue-200' : 'bg-red-100 text-red-800 hover:bg-red-200'}">
                                 ${branch[m] ? 'Lunas' : 'Belum'}
                             </button>
                         </td>
@@ -1061,7 +978,7 @@
                 });
 
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-semibold text-gray-800 flex items-center space-x-2">
+                    <td class="px-4 py-3 font-semibold text-gray-800 text-left flex items-center space-x-1">
                         <i class="fa-solid fa-map-location-dot text-[#0880a7]"></i>
                         <span>${branch.name}</span>
                     </td>
@@ -1072,7 +989,6 @@
             });
 
             document.getElementById('dues-current-realization').innerText = formatRupiah(totalDuesInflow);
-            document.getElementById('dues-active-branches').innerText = `${branchDues.length} PC Aktif`;
         }
 
         function toggleDueStatus(branchId, month) {
@@ -1087,31 +1003,32 @@
                 if(!transactions.some(t => t.refNum === ref)) {
                     transactions.push({
                         id: "TX-" + (transactions.length + 101),
-                        date: "2026-06-23",
+                        date: tanggalFormat,
                         type: "in",
-                        category: "Iuran Pengurus Cabang",
-                        amount: 500000,
+                        amount: 100000, 
                         notes: `Iuran Wajib Bulanan PC ${branch.name.split(' ')[1]} Bulan ${month.toUpperCase()}`,
                         refNum: ref,
-                        receipt: true
+                        receipt: true,
+                        picCount: 1
                     });
-                    showToast(`Sistem merekam pemasukan iuran PC ${branch.name}`);
+                    showToast(`Pemasukan iuran PC ${branch.name} direkam.`);
                 }
             } else {
                 const ref = "IUR-" + branchId + "-" + month.toUpperCase();
                 transactions = transactions.filter(t => t.refNum !== ref);
-                showToast(`Sistem membatalkan pencatatan iuran PC ${branch.name}`);
+                showToast(`Pencatatan iuran PC ${branch.name} dibatalkan.`);
             }
 
+            saveToLocalStorage();
             renderDues();
             renderDashboard();
             renderTransactions();
             renderReports();
         }
 
-        // --- RAB PROJECT BUDGET LOGIC ---
         function renderRAB() {
             const container = document.getElementById('rab-container');
+            if(!container) return;
             container.innerHTML = '';
 
             rabProjects.forEach(proj => {
@@ -1161,7 +1078,7 @@
                                 <span class="text-gray-700">${progressSpent.toFixed(0)}%</span>
                             </div>
                             <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                                <div class="bg-red-500 h-full rounded-full" style="width: ${Math.min(progressSpent, 100)}%"></div>
+                                <div class="bg-red-50 h-full rounded-full" style="width: ${Math.min(progressSpent, 100)}%"></div>
                             </div>
                         </div>
                     </div>
@@ -1193,6 +1110,7 @@
             rabProjects.push({ id: newId, name, target, allocated, spent });
             
             showToast("Proyek RAB Baru Berhasil Dibuat");
+            saveToLocalStorage();
             closeRABModal();
             renderRAB();
         }
@@ -1200,27 +1118,31 @@
         function deleteRAB(id) {
             if(confirm(`Hapus rencana anggaran proyek ini?`)) {
                 rabProjects = rabProjects.filter(r => r.id !== id);
-                showToast("RAB dihapus");
+                showToast("RAB berhasil dihapus");
+                saveToLocalStorage();
                 renderRAB();
             }
         }
 
-        // --- PRINTABLE REPORTS GENERATOR ---
         function renderReports() {
             let incomesSum = transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
             let expensesSum = transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
             let net = incomesSum - expensesSum;
             let efficiency = incomesSum > 0 ? ((expensesSum / incomesSum) * 100).toFixed(0) : 0;
 
-            document.getElementById('rep-incomes').innerText = formatRupiah(incomesSum);
-            document.getElementById('rep-expenses').innerText = formatRupiah(expensesSum);
-            document.getElementById('rep-net').innerText = formatRupiah(net);
-            document.getElementById('rep-efficiency').innerText = `${efficiency}% Terpakai`;
+            const repIncomes = document.getElementById('rep-incomes');
+            if(repIncomes) repIncomes.innerText = formatRupiah(incomesSum);
+            const repExpenses = document.getElementById('rep-expenses');
+            if(repExpenses) repExpenses.innerText = formatRupiah(expensesSum);
+            const repNet = document.getElementById('rep-net');
+            if(repNet) repNet.innerText = formatRupiah(net);
+            const repEfficiency = document.getElementById('rep-efficiency');
+            if(repEfficiency) repEfficiency.innerText = `${efficiency}% Terpakai`;
 
             const tbody = document.getElementById('rep-transactions-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
-
-            const sorted = [...transactions].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const sorted = [...transactions].sort((a,b) => new Date(a.date) - new Date(a.date));
 
             sorted.forEach(tx => {
                 const tr = document.createElement('tr');
@@ -1228,7 +1150,6 @@
                 tr.innerHTML = `
                     <td class="py-2 text-gray-500 font-mono">${tx.refNum || '-'}</td>
                     <td class="py-2">${new Date(tx.date).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'})}</td>
-                    <td class="py-2"><span class="font-medium text-gray-600">${tx.category}</span></td>
                     <td class="py-2 font-semibold text-gray-800">${tx.notes}</td>
                     <td class="py-2 text-right font-bold text-blue-800">${tx.type === 'in' ? formatRupiah(tx.amount) : '-'}</td>
                     <td class="py-2 text-right font-bold text-red-700">${tx.type === 'out' ? formatRupiah(tx.amount) : '-'}</td>
@@ -1237,22 +1158,68 @@
             });
         }
 
+        // KONSEP BARU: Log Aktivitas Jurnal Akuntansi Profesional & Grafik Perbandingan Rasio Kas
+        function renderAdminPanel() {
+            const logContainer = document.getElementById('admin-log-container');
+            if(!logContainer) return;
+            logContainer.innerHTML = '';
+
+            // Menghitung statistik riil untuk kebutuhan administrasi audit bendahara
+            let withReceipt = transactions.filter(t => t.receipt && t.picCount > 0).length;
+            let totalTransactions = transactions.length;
+            document.getElementById('admin-receipt-count').innerText = `${withReceipt} / ${totalTransactions} Berkas`;
+            
+            let pct = totalTransactions > 0 ? (withReceipt / totalTransactions) * 100 : 0;
+            document.getElementById('admin-receipt-bar').style.width = `${pct}%`;
+
+            let totalValue = transactions.reduce((sum, t) => sum + t.amount, 0);
+            let avgValue = totalTransactions > 0 ? totalValue / totalTransactions : 0;
+            document.getElementById('admin-avg-tx').innerText = formatRupiah(avgValue.toFixed(0));
+
+            // Populate baris riil log audit bendahara
+            transactions.slice(0, 10).forEach(t => {
+                let p = document.createElement('p');
+                p.className = "text-gray-600 border-b border-gray-100 py-1";
+                p.innerHTML = `<span class="text-blue-700 font-bold">[${t.date}]</span> Jurnal <span class="font-bold">${t.refNum}</span> senilai <span class="text-[#0880a7] font-bold">Rp ${t.amount.toLocaleString('id-ID')}</span> berhasil diverifikasi bendahara.`;
+                logContainer.appendChild(p);
+            });
+
+            // Grafik rasio donasi masuk vs biaya keluar operasional
+            let incSum = transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
+            let expSum = transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
+
+            const ctxRatio = document.getElementById('admin-ratio-chart').getContext('2d');
+            if(adminRatioChartObj) adminRatioChartObj.destroy();
+            adminRatioChartObj = new Chart(ctxRatio, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Masuk', 'Keluar'],
+                    datasets: [{
+                        data: [incSum, expSum],
+                        backgroundColor: ['#0880a7', '#ef4444'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
         function exportToCSV() {
             const escapeCSV = (str) => {
                 if (str === null || str === undefined) return '""';
-                return `"${str.toString().replace(/"/g, '""')}"`;
+                return `"${str.toString().replace(/"/g, '""').replace(/\n/g, ' ')}"`;
             };
 
-            let csvContent = "No. Ref,Tanggal,Kategori,Keterangan,Tipe,Nominal,Kwitansi\n";
+            let csvContent = "No. Ref,Tanggal,Keterangan,Tipe,Nominal,Kwitansi\n";
             transactions.forEach(t => {
                 csvContent += [
-                    escapeCSV(t.refNum),
-                    escapeCSV(t.date),
-                    escapeCSV(t.category),
-                    escapeCSV(t.notes),
-                    escapeCSV(t.type === 'in' ? 'Pemasukan' : 'Pengeluaran'),
-                    t.amount,
-                    escapeCSV(t.receipt ? 'Ada' : 'Belum Ada')
+                    escapeCSV(t.refNum), escapeCSV(t.date), escapeCSV(t.notes),
+                    escapeCSV(t.type === 'in' ? 'Pemasukan' : 'Pengeluaran'), t.amount,
+                    escapeCSV(t.receipt ? `Ada (${t.picCount} Foto)` : 'Belum Ada')
                 ].join(",") + "\n";
             });
 
@@ -1267,149 +1234,22 @@
             showToast("File CSV Berhasil Diunduh");
         }
 
-        // --- INTEGRATED GEMINI CHAT AI ASSISTANT ---
-        const aiMessages = [];
-
-        async function triggerAIQuickPrompt(type) {
-            let prompt = "";
-            if (type === 'analisis') {
-                prompt = "Lakukan analisis keuangan taktis terhadap data buku kas dan RAB kami. Berikan kesimpulan status kesehatan kas, persentase pengeluaran, serta rekomendasi pengelolaan keuangan organisasi.";
-            } else if (type === 'draf') {
-                prompt = "Tolong susunkan draf narasi sambutan & laporan pembuka pertanggungjawaban Bendahara Wilayah PW GMAH Jatim untuk Rapat Syura pengurus.";
-            } else if (type === 'saran') {
-                prompt = "Sebagai organisasi mahasiswa dakwah PW GMAH Jatim, kami butuh ide penggalangan dana mandiri yang halal, edukatif, dan kreatif tanpa membebani anggota terlalu berat. Tolong berikan 4 konsep taktis.";
-            }
-
-            document.getElementById('ai-input').value = prompt;
-            sendChatMessage();
-        }
-
-        async function sendChatMessage() {
-            const inputEl = document.getElementById('ai-input');
-            const messageText = inputEl.value.trim();
-            if(!messageText) return;
-
-            // Display User Message
-            appendChatMessage("Anda", messageText, false);
-            inputEl.value = '';
-
-            // Disable send button while loading
-            const sendBtn = document.getElementById('ai-send-btn');
-            sendBtn.disabled = true;
-            sendBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
-
-            // Show Loading Indicator from AI
-            const loadingMsgId = appendChatMessage("Ukhuwah AI Assistant", "Sedang menganalisis kas PW GMAH Jatim...", true);
-
-            // Construct Data Context for prompt grounding
-            const ledgerContext = transactions.map(t => `${t.date} | ${t.type === 'in' ? 'Debit' : 'Kredit'} | Kat: ${t.category} | Jml: Rp ${t.amount} | Ket: ${txBrief(t.notes)}`).join("\n");
-            const duesContext = branchDues.map(b => `${b.name}: ${JSON.stringify(b)}`).join("\n");
-            const rabContext = rabProjects.map(r => `${r.name}: Target Rp ${r.target}, Terkumpul Rp ${r.allocated}`).join("\n");
-
-            const contextSystem = `
-            Anda adalah ustadz virtual sekaligus Konsultan Keuangan / Asisten Bendahara AI untuk Gerakan Mahasiswa Hidayatullah Jawa Timur (PW GMAH Jatim).
-            Tugas Anda adalah merespon pertanyaan dengan bahasa Indonesia yang santun, islami (gunakan sapaan Akhi, Antum, Syura, Jazakumullah), cerdas, dan profesional.
-            
-            Berikut adalah data keuangan riil PW saat ini:
-            --- BUKU KAS UTAMA ---
-            ${ledgerContext}
-            
-            --- SETORAN IURAN CABANG (Tahun 2026) ---
-            ${duesContext}
-
-            --- PROYEK RAB ---
-            ${rabContext}
-            `;
-
-            try {
-                const responseText = await callGeminiAPI(messageText, contextSystem);
-                // Remove loading message and replace with actual response
-                removeChatMessage(loadingMsgId);
-                appendChatMessage("Ukhuwah AI Assistant", responseText, true);
-            } catch (err) {
-                removeChatMessage(loadingMsgId);
-                appendChatMessage("Ukhuwah AI Assistant", "Afwan, terjadi kendala saat menghubungkan ke server AI. Mohon coba sesaat lagi.", true);
-                console.error(err);
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
-            }
-        }
-
-        function txBrief(notes) {
-            return notes.length > 40 ? notes.substring(0, 37) + '...' : notes;
-        }
-
-        function appendChatMessage(sender, text, isAI) {
-            const container = document.getElementById('ai-messages-container');
-            const msgId = "msg-" + Date.now();
-            
-            const wrapper = document.createElement('div');
-            wrapper.id = msgId;
-            wrapper.className = "flex items-start gap-3 " + (isAI ? "" : "flex-row-reverse");
-
-            const icon = isAI ? 
-                `<div class="bg-emerald-800 text-white rounded-full p-2 w-8 h-8 flex items-center justify-center text-xs shrink-0 shadow"><i class="fa-solid fa-robot"></i></div>` :
-                `<div class="bg-amber-500 text-white rounded-full p-2 w-8 h-8 flex items-center justify-center text-xs shrink-0 shadow"><i class="fa-solid fa-user"></i></div>`;
-
-            // Formatting markdown-like lists cleanly for chat bubbles
-            let formattedText = text.replace(/\n/g, "<br>");
-            // Bold conversion simple
-            formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-
-            wrapper.innerHTML = `
-                ${icon}
-                <div class="bg-white rounded-2xl p-3 shadow-sm text-xs leading-relaxed max-w-[85%] border border-gray-100">
-                    <p class="font-bold ${isAI ? 'text-emerald-800' : 'text-amber-600'} mb-1">${sender}</p>
-                    <div class="space-y-1">${formattedText}</div>
-                </div>
-            `;
-            container.appendChild(wrapper);
-            container.scrollTop = container.scrollHeight;
-            return msgId;
-        }
-
-        function removeChatMessage(id) {
-            const el = document.getElementById(id);
-            if(el) el.remove();
-        }
-
-        // Gemini Generative API Gateway using direct fetch with exponential backoff
-        async function callGeminiAPI(query, systemPrompt) {
-            const apiKey = ""; // Canvas handles key inject autonomously
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: query }] }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                }
-            };
-
-            let delay = 1000;
-            const maxRetries = 3;
-            for (let attempt = 0; attempt < maxRetries; attempt++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.status === 429) {
-                        // Throttled: wait and retry
-                        await new Promise(res => setTimeout(res, delay));
-                        delay *= 2;
-                        continue;
-                    }
-
-                    const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "Afwan, respon AI tidak ditemukan.";
-                } catch (e) {
-                    if (attempt === maxRetries - 1) throw e;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
+        function resetKeDataAwal() {
+            if(confirm("Apakah Antum yakin ingin membersihkan local storage dan mengembalikan kas ke data bawaan awal kepengurusan?")) {
+                localStorage.removeItem('gmah_transactions');
+                localStorage.removeItem('gmah_dues');
+                localStorage.removeItem('gmah_rab');
+                transactions = defaultTransactions;
+                branchDues = defaultBranchDues;
+                rabProjects = defaultRABProjects;
+                saveToLocalStorage();
+                renderDashboard();
+                renderTransactions();
+                renderDues();
+                renderRAB();
+                renderReports();
+                renderAdminPanel();
+                showToast("Sistem Berhasil Direset Kembali.", false);
             }
         }
     </script>
