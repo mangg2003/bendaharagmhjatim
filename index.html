@@ -53,7 +53,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Header -->
     <header class="bg-[#0880a7] text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -81,7 +80,6 @@
 
     <div class="flex flex-1 flex-col md:flex-row max-w-7xl w-full mx-auto px-0 sm:px-4 lg:px-8 py-4 sm:py-6 gap-6">
         
-        <!-- Sidebar -->
         <aside id="sidebar" class="hidden md:block w-full md:w-64 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 shrink-0 self-start">
             <div class="space-y-1">
                 <button onclick="switchTab('dashboard')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left bg-blue-50 text-[#0880a7]" data-tab="dashboard">
@@ -123,7 +121,6 @@
 
         <main class="flex-1 bg-white md:rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 min-h-[500px]">
             
-            <!-- Tab: Dashboard Utama -->
             <div id="page-dashboard" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-gradient-to-tr from-[#0880a7] to-blue-700 text-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
@@ -199,7 +196,6 @@
                 </div>
             </div>
 
-            <!-- Tab: Pencatatan Buku Kas -->
             <div id="page-transactions" class="space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
@@ -250,7 +246,6 @@
                 </div>
             </div>
 
-            <!-- Tab: Iuran Bulanan -->
             <div id="page-dues" class="space-y-6 hidden">
                 <div>
                     <h2 class="text-xl font-bold text-gray-800">Iuran Wajib PD GMH JATIM</h2>
@@ -307,7 +302,6 @@
                 </div>
             </div>
 
-            <!-- Tab: Perencanaan RAB Proyek -->
             <div id="page-rab" class="space-y-6 hidden">
                 <div class="flex justify-between items-center">
                     <div>
@@ -321,7 +315,6 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="rab-container"></div>
             </div>
 
-            <!-- Tab: Laporan Pertanggungjawaban -->
             <div id="page-reports" class="space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
@@ -361,10 +354,6 @@
                                 <span class="text-gray-400">Kas Bersih Saat Ini</span>
                                 <p class="text-sm font-bold text-gray-800 mt-1" id="rep-net">Rp 0</p>
                             </div>
-                            <div class="bg-gray-50 p-3 rounded-lg">
-                                <span class="text-gray-400">Persentase Efisiensi</span>
-                                <p class="text-sm font-bold text-blue-800 mt-1" id="rep-efficiency">0%</p>
-                            </div>
                         </div>
                     </div>
 
@@ -396,7 +385,7 @@
                         <div class="space-y-16">
                             <p>Surabaya, 24 Juni 2026<br><b>Bendahara PD GMH JATIM</b></p>
                             <div>
-                                <p class="font-bold underline" id="rep-treasurer-name">Abdul Rahman</p>
+                                <p class="font-bold underline" id="rep-treasurer-name">Haidar Ali Ahmad</p>
                                 <p class="text-gray-400 text-[10px]">NIM. 24112667</p>
                             </div>
                         </div>
@@ -404,8 +393,7 @@
                 </div>
             </div>
 
-            <!-- Tab: Admin Bendahara -->
-            <div id="page-admin-panel" class="flex flex-col items-center justify-center min-h-[450px] p-4 bg-white">
+            <div id="page-admin-panel" class="flex flex-col items-center justify-center min-h-[450px] p-4 bg-white hidden">
                 <div class="max-w-md w-full bg-white border border-gray-100 rounded-3xl shadow-sm p-8 text-center space-y-6">
                     
                     <div class="mx-auto flex items-center justify-center w-28 h-28 rounded-full bg-blue-50/70">
@@ -439,7 +427,6 @@
         </main>
     </div>
 
-    <!-- Modal Form Buku Kas -->
     <div id="transaction-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="bg-gradient-to-r from-[#0880a7] to-blue-900 px-6 py-4 text-white flex justify-between items-center">
@@ -479,7 +466,6 @@
                         </label>
                     </div>
 
-                    <!-- POIN 4: INPUT MENDUKUNG BEBERAPA BERKAS FOTO (MULTIPLE) -->
                     <div id="upload-container" class="hidden border border-dashed border-blue-300 bg-white p-3 rounded-lg flex flex-col items-center justify-center transition-all duration-300">
                         <label for="file-upload" class="cursor-pointer flex flex-col items-center space-y-1 w-full text-center">
                             <i class="fa-solid fa-images text-[#0880a7] text-xl"></i>
@@ -501,7 +487,6 @@
         </div>
     </div>
 
-    <!-- Modal Form RAB -->
     <div id="rab-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="bg-gradient-to-r from-[#0880a7] to-blue-900 px-6 py-4 text-white flex justify-between items-center">
@@ -538,7 +523,6 @@
         </div>
     </div>
 
-    <!-- MODAL POP-UP PRATINJAU FOTO BERKAS KWITANSI (MENAMPILKAN GAMBAR ASLI YANG DIUNGHAH) -->
     <div id="preview-photo-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-gray-100">
             <div class="bg-[#0880a7] px-5 py-3.5 text-white flex justify-between items-center">
@@ -546,7 +530,6 @@
                 <button onclick="closePreviewModal()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-6 flex flex-col items-center justify-center bg-gray-50">
-                <!-- Swiper Penampung Kumpulan Gambar Pratinjau Dinamis -->
                 <div id="modal-preview-gallery" class="flex flex-col items-center space-y-4 w-full overflow-y-auto max-h-96">
                     <img id="modal-preview-img" src="" alt="Bukti Kwitansi Transaksi" class="max-h-80 w-auto object-contain rounded-xl shadow-sm border border-gray-200">
                 </div>
@@ -555,10 +538,9 @@
         </div>
     </div>
 
-    <!-- SCRIPT UTAMA KONEKSI SINKRONISASI CLOUD FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxWiscsFbcVADP5khxAJ1-1BT2t8wPGCk",
@@ -574,59 +556,52 @@
         const db = getFirestore(app);
 
         window.db = db;
-        window.updateCloudDatabase = async function(saldo, pemasukan, pengeluaran) {
+
+        // PERBAIKAN UTAMA: Mengirimkan seluruh paket data (Transaksi, Iuran, RAB) ke server cloud Firebase
+        window.saveSystemDataToCloud = async function() {
             try {
-                await setDoc(doc(db, "kas_utama", "kas_utama"), {
-                    total_saldo: saldo,
-                    total_pemasukan: pemasukan,
-                    total_pengeluaran: pengeluaran
+                await setDoc(doc(db, "database_kas", "sistem_bendahara"), {
+                    transactions: window.transactions,
+                    branchDues: window.branchDues,
+                    rabProjects: window.rabProjects
                 });
-                console.log("Firebase Berhasil Disinkronkan!");
+                console.log("Firebase Cloud Berhasil Disinkronkan secara Global!");
             } catch (err) {
-                console.error("Gagal update cloud database:", err);
+                console.error("Gagal sinkronisasi ke server Firebase:", err);
             }
         };
 
-        window.muatDataDariFirebase = async function() {
-            try {
-                const docRef = doc(db, "kas_utama", "kas_utama");
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const cloudData = docSnap.data();
-                    
-                    document.getElementById('metric-balance').innerText = "Rp " + parseFloat(cloudData.total_saldo).toLocaleString('id-ID');
-                    document.getElementById('sidebar-balance').innerText = "Rp " + parseFloat(cloudData.total_saldo).toLocaleString('id-ID');
-                    document.getElementById('metric-incomes').innerText = "Rp " + parseFloat(cloudData.total_pemasukan).toLocaleString('id-ID');
-                    document.getElementById('metric-expenses').innerText = "Rp " + parseFloat(cloudData.total_pengeluaran).toLocaleString('id-ID');
-                    
-                    if(document.getElementById('rep-incomes')) {
-                        document.getElementById('rep-incomes').innerText = "Rp " + parseFloat(cloudData.total_pemasukan).toLocaleString('id-ID');
-                        document.getElementById('rep-expenses').innerText = "Rp " + parseFloat(cloudData.total_pengeluaran).toLocaleString('id-ID');
-                        document.getElementById('rep-net').innerText = "Rp " + parseFloat(cloudData.total_saldo).toLocaleString('id-ID');
-                    }
-                }
-            } catch (error) {
-                console.error("Gagal sinkronisasi data jembatan cloud:", error);
-            }
-        };
-
+        // REAL-TIME SNAPSHOT: Sinkronisasi instan antar laptop & HP secara permanen tanpa LocalStorage
         window.addEventListener('DOMContentLoaded', () => {
-            window.muatDataDariFirebase();
+            onSnapshot(doc(db, "database_kas", "sistem_bendahara"), (docSnap) => {
+                if (docSnap.exists() && docSnap.data()) {
+                    const dataCloud = docSnap.data();
+                    window.transactions = dataCloud.transactions || [];
+                    window.branchDues = dataCloud.branchDues || window.defaultBranchDues;
+                    window.rabProjects = dataCloud.rabProjects || window.defaultRABProjects;
+                } else {
+                    window.transactions = [
+                        { id: "TX-101", date: "2026-06-24", type: "in", amount: 150000, notes: "Iuran Wajib PC", refNum: "REF/GMH-JTM/11", receipt: true, picCount: 1, imgDataList: [] },
+                        { id: "TX-102", date: "2026-06-24", type: "out", amount: 222222, notes: "Biaya Konsumsi Rapat", refNum: "REF/GMH-JTM/561", receipt: true, picCount: 1, imgDataList: [] }
+                    ];
+                    window.branchDues = window.defaultBranchDues;
+                    window.rabProjects = window.defaultRABProjects;
+                    window.saveSystemDataToCloud();
+                }
+                
+                // Sinkronisasi render ulang ke layar antarmuka
+                window.renderDashboard();
+                window.renderTransactions();
+                window.renderReports();
+                window.renderDues();
+                window.renderRAB();
+            });
         });
     </script>
 
-    <!-- KODE LOGIKA JALANNYA APLIKASI WEB INTERAL -->
     <script>
-        // Array Gambar Base64 kumpulan multi-upload gambar aktif
-        let currentUploadedImagesArray = [];
-
-        let defaultTransactions = [
-            { id: "TX-101", date: "2026-06-24", type: "in", amount: 150000, notes: "Iuran Wajib PC", refNum: "REF/GMH-JTM/11", receipt: true, picCount: 1, imgDataList: [] },
-            { id: "TX-102", date: "2026-06-24", type: "out", amount: 222222, notes: "Biaya Konsumsi Rapat", refNum: "REF/GMH-JTM/561", receipt: true, picCount: 1, imgDataList: [] }
-        ];
-
-        let defaultBranchDues = [
+        // Cetakan dasar sistem
+        window.defaultBranchDues = [
             { id: "PC-SBY", name: "PC Surabaya", jan: true, feb: true, mar: true, apr: true, mei: true, jun: true, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
             { id: "PC-MLG", name: "PC Malang", jan: true, feb: true, mar: true, apr: true, mei: true, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
             { id: "PC-JMB", name: "PC Jember", jan: true, feb: true, mar: true, apr: false, mei: true, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
@@ -636,61 +611,60 @@
             { id: "PC-GRK", name: "PC Gresik", jan: true, feb: true, mar: false, apr: false, mei: false, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false }
         ];
 
-        let defaultRABProjects = [
+        window.defaultRABProjects = [
             { id: "RAB-01", name: "Next Gen Leader", target: 10000000, allocated: 3000000, spent: 2000000 }
         ];
 
-        let transactions = JSON.parse(localStorage.getItem('gmah_transactions')) || defaultTransactions;
-        let branchDues = JSON.parse(localStorage.getItem('gmah_dues')) || defaultBranchDues;
-        let rabProjects = JSON.parse(localStorage.getItem('gmah_rab')) || defaultRABProjects;
+        // VARIABEL UTAMA DINONAKTIFKAN DARI LOCALSTORAGE & SEPENUHNYA MEMBACA ARRAY FIREBASE CLOUD
+        window.transactions = [];
+        window.branchDues = [];
+        window.rabProjects = [];
 
+        let currentUploadedImagesArray = [];
         let cashflowChartObj = null;
         let tglGlobal = new Date();
         const tanggalFormat = `${tglGlobal.getFullYear()}-${String(tglGlobal.getMonth() + 1).padStart(2, '0')}-${String(tglGlobal.getDate()).padStart(2, '0')}`;
 
-        function saveToLocalStorage() {
-            localStorage.setItem('gmah_transactions', JSON.stringify(transactions));
-            localStorage.setItem('gmah_dues', JSON.stringify(branchDues));
-            localStorage.setItem('gmah_rab', JSON.stringify(rabProjects));
-        }
-
-        // POIN 2: PERBAIKAN FUNGSIONAL HITUNGAN SINKRONISASI TOTAL ANTARA GRAFIK DAN KOTAK ATAS
-        function hitungDanSyncKeFirebase() {
-            let incomesSum = transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
-            let expensesSum = transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
+        window.renderDashboard = function() {
+            let incomesSum = window.transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
+            let expensesSum = window.transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
             let totalKas = incomesSum - expensesSum;
 
-            // Merubah antarmuka lokal laptop langsung mengikuti isi hitungan riil
             document.getElementById('metric-balance').innerText = formatRupiah(totalKas);
             document.getElementById('sidebar-balance').innerText = formatRupiah(totalKas);
             document.getElementById('metric-incomes').innerText = formatRupiah(incomesSum);
             document.getElementById('metric-expenses').innerText = formatRupiah(expensesSum);
 
-            document.getElementById('metric-incomes-count').innerText = `${transactions.filter(t => t.type === 'in').length} transaksi`;
-            document.getElementById('metric-expenses-count').innerText = `${transactions.filter(t => t.type === 'out').length} transaksi`;
+            document.getElementById('metric-incomes-count').innerText = `${window.transactions.filter(t => t.type === 'in').length} transaksi`;
+            document.getElementById('metric-expenses-count').innerText = `${window.transactions.filter(t => t.type === 'out').length} transaksi`;
 
-            if (window.updateCloudDatabase) {
-                window.updateCloudDatabase(totalKas, incomesSum, expensesSum);
-            }
-        }
-
-        window.onload = function() {
-            const hariIni = new Date();
-            const opsiFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('current-date-el').innerText = hariIni.toLocaleDateString('id-ID', opsiFormat);
+            const recentContainer = document.getElementById('recent-transactions-container');
+            recentContainer.innerHTML = '';
+            const sortedTx = [...window.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
             
-            renderDashboard();
-            renderTransactions();
-            renderDues();
-            renderRAB();
-            renderReports();
-            
-            document.getElementById("mobile-menu-toggle").onclick = function() {
-                document.getElementById("sidebar").classList.toggle("hidden");
-            };
-        }
+            sortedTx.forEach(tx => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-3 rounded-xl bg-gray-50 text-xs";
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 rounded-lg ${tx.type === 'in' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'}">
+                            <i class="fa-solid ${tx.type === 'in' ? 'fa-arrow-down-left' : 'fa-arrow-up-right-from-square'}"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">${tx.notes}</p>
+                            <p class="text-[10px] text-gray-400">${new Date(tx.date).toLocaleDateString('id-ID')}</p>
+                        </div>
+                    </div>
+                    <span class="font-bold ${tx.type === 'in' ? 'text-blue-700' : 'text-red-600'}">
+                        ${tx.type === 'in' ? '+' : '-'}${formatRupiah(tx.amount)}
+                    </span>
+                `;
+                recentContainer.appendChild(item);
+            });
 
-        // PROSES MERUBAH MULTI-UPLOAD BERKAS JADI ARRAY BASE64 STRINGS
+            buildCashflowChart();
+        };
+
         function displayMultipleFileNames(input) {
             const preview = document.getElementById('file-name-preview');
             preview.innerHTML = '';
@@ -733,17 +707,17 @@
             }
         }
 
-        function switchTab(tabId) {
-            ['dashboard', 'transactions', 'dues', 'rab', 'reports', 'admin-panel'].forEach(t => {
-                const el = document.getElementById(`page-${t}`);
-                if (el) el.classList.add('hidden');
-            });
-            
-            const activeEl = document.getElementById(`page-${tabId}`);
-            if (activeEl) activeEl.classList.remove('hidden');
+        function switchTab(id) { 
+            ['dashboard', 'transactions', 'dues', 'rab', 'reports', 'admin-panel'].forEach(x => {
+                const el = document.getElementById(`page-${x}`);
+                if(el) el.classList.add('hidden');
+            }); 
+
+            const activeEl = document.getElementById(`page-${id}`);
+            if(activeEl) activeEl.classList.remove('hidden');
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.getAttribute('data-tab') === tabId) {
+                if (btn.getAttribute('data-tab') === id) {
                     btn.classList.add('bg-blue-50', 'text-[#0880a7]');
                 } else {
                     btn.classList.remove('bg-blue-50', 'text-[#0880a7]');
@@ -751,8 +725,11 @@
                 }
             });
 
-            if (tabId === 'dashboard') renderDashboard();
-            if (tabId === 'reports') renderReports();
+            if(id==='dashboard') window.renderDashboard(); 
+            if(id==='transactions') window.renderTransactions(); 
+            if(id==='reports') window.renderReports(); 
+            if(id==='rab') window.renderRAB(); 
+            if(id==='dues') window.renderDues(); 
         }
 
         function showToast(message) {
@@ -766,46 +743,16 @@
             return "Rp " + parseFloat(num).toLocaleString('id-ID');
         }
 
-        function renderDashboard() {
-            const recentContainer = document.getElementById('recent-transactions-container');
-            recentContainer.innerHTML = '';
-            const sortedTx = [...transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
-            
-            sortedTx.forEach(tx => {
-                const item = document.createElement('div');
-                item.className = "flex items-center justify-between p-3 rounded-xl bg-gray-50 text-xs";
-                item.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <div class="p-2 rounded-lg ${tx.type === 'in' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'}">
-                            <i class="fa-solid ${tx.type === 'in' ? 'fa-arrow-down-left' : 'fa-arrow-up-right-from-square'}"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-gray-800">${tx.notes}</p>
-                            <p class="text-[10px] text-gray-400">${new Date(tx.date).toLocaleDateString('id-ID')}</p>
-                        </div>
-                    </div>
-                    <span class="font-bold ${tx.type === 'in' ? 'text-blue-700' : 'text-red-600'}">
-                        ${tx.type === 'in' ? '+' : '-'}${formatRupiah(tx.amount)}
-                    </span>
-                `;
-                recentContainer.appendChild(item);
-            });
-
-            buildCashflowChart();
-            hitungDanSyncKeFirebase();
-        }
-
-        // LOGIKA PERHITUNGAN AKUMULASI GRAFIK SECARA DINAMIS MENGIKUTI TRANSAKSI ASLI BUKU KAS
         function buildCashflowChart() {
             const canvas = document.getElementById('cashflow-chart');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             if (cashflowChartObj) cashflowChartObj.destroy();
 
-            const sortedTx = [...transactions].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const sortedTx = [...window.transactions].sort((a,b) => new Date(a.date) - new Date(b.date));
             
             let akumulasiMap = {};
-            let akumulasiSaldo = 0; // Murni akumulasi awal dari 0 rupiah
+            let akumulasiSaldo = 0;
 
             sortedTx.forEach(t => {
                 let tanggalFormated = new Date(t.date).toLocaleDateString('id-ID', {day: 'numeric', month: 'short'});
@@ -847,14 +794,13 @@
             });
         }
 
-        // POIN 1 & 3: PERBAIKAN LOGIKA STATUS BUKTI BERKAS (✓ FOTO VS ⚠️ KOSONG) SESUAI GAMBAR 3
-        function renderTransactions() {
+        window.renderTransactions = function() {
             const query = document.getElementById('tx-search').value.toLowerCase();
             const typeFilter = document.getElementById('tx-type-filter').value;
             const tbody = document.getElementById('tx-table-body');
             tbody.innerHTML = '';
 
-            let filtered = transactions.filter(tx => {
+            let filtered = window.transactions.filter(tx => {
                 return (tx.notes.toLowerCase().includes(query) || tx.refNum.toLowerCase().includes(query)) && (typeFilter === 'all' || tx.type === typeFilter);
             });
 
@@ -867,15 +813,12 @@
                     row.className = "hover:bg-gray-50 border-b border-gray-100";
                     
                     let badgeKwitansi = '';
-
-                    // Jika ada centang DAN ada file aslinya, tampilkan tombol hijau aktif
                     if (tx.receipt && tx.imgDataList && tx.imgDataList.length > 0) {
                         badgeKwitansi = `
                             <button onclick="openPreviewModal('${tx.id}')" class='text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg font-semibold hover:bg-emerald-100 transition flex items-center space-x-1'>
                                 <i class='fa-solid fa-square-check'></i> <span>${tx.imgDataList.length} Foto</span>
                             </button>`;
                     } else {
-                        // JIKA BELUM ADA FOTO / HANYA CENTANG TANPA FILE, OTOMATIS TULISAN EMAS "⚠️ KOSONG" KUNCI MATI
                         badgeKwitansi = `
                             <span class='text-amber-600 font-semibold flex items-center space-x-1 select-none'>
                                 <i class="fa-solid fa-triangle-exclamation"></i> <span>Kosong</span>
@@ -889,7 +832,6 @@
                         <td class="px-4 py-3 font-bold ${tx.type === 'in' ? 'text-blue-700' : 'text-red-600'}">${formatRupiah(tx.amount)}</td>
                         <td class="px-4 py-3">${badgeKwitansi}</td>
                         <td class="px-4 py-3 text-center">
-                            <button onclick="editTransaction('${tx.id}')" class="text-gray-400 hover:text-blue-700 mr-2"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button onclick="deleteTransaction('${tx.id}')" class="text-gray-400 hover:text-red-600"><i class="fa-solid fa-trash-can"></i></button>
                         </td>
                     `;
@@ -898,24 +840,21 @@
             }
         }
 
-        // FUNGSI POP-UP MODAL PRATINJAU MULTI FOTO YANG DIUPLOAD
         function openPreviewModal(txId) {
-            const tx = transactions.find(t => t.id === txId);
+            const tx = window.transactions.find(t => t.id === txId);
             if (!tx) return;
 
             const galleryContainer = document.getElementById('modal-preview-gallery');
-            galleryContainer.innerHTML = ''; // Bersihkan wadah lama
+            galleryContainer.innerHTML = '';
 
-            // Render semua foto berkas base64 dari array list-nya secara estetik kebawah
             if (tx.imgDataList && tx.imgDataList.length > 0) {
-                tx.imgDataList.forEach((base64Src, index) => {
+                tx.imgDataList.forEach(base64Src => {
                     let imageEl = document.createElement('img');
                     imageEl.src = base64Src;
                     imageEl.className = "max-h-80 w-auto object-contain rounded-xl shadow-sm border border-gray-200 mb-3";
                     galleryContainer.appendChild(imageEl);
                 });
             } else {
-                // Jika data bawaan awal, tampilkan fallback gambar default biar tidak kosong melompong
                 let fallbackImg = document.createElement('img');
                 fallbackImg.src = "https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?w=500&auto=format&fit=crop&q=80";
                 fallbackImg.className = "max-h-80 w-auto object-contain rounded-xl shadow-sm border border-gray-200";
@@ -944,7 +883,7 @@
 
         function closeTransactionModal() { document.getElementById('transaction-modal').classList.add('hidden'); }
 
-        function handleTransactionSubmit(e) {
+        window.handleTransactionSubmit = async function(e) {
             e.preventDefault();
             const id = document.getElementById('form-tx-id').value;
             const type = document.getElementById('form-tx-type').value;
@@ -955,78 +894,77 @@
             const receipt = document.getElementById('form-tx-receipt').checked;
 
             if (id) {
-                const index = transactions.findIndex(t => t.id === id);
+                const index = window.transactions.findIndex(t => t.id === id);
                 if (index !== -1) {
-                    transactions[index].date = date;
-                    transactions[index].amount = amount;
-                    transactions[index].notes = notes;
-                    transactions[index].refNum = refNum;
-                    transactions[index].receipt = receipt;
-                    if(currentUploadedImagesArray.length > 0) transactions[index].imgDataList = currentUploadedImagesArray;
+                    window.transactions[index].date = date;
+                    window.transactions[index].amount = amount;
+                    window.transactions[index].notes = notes;
+                    window.transactions[index].refNum = refNum;
+                    window.transactions[index].receipt = receipt;
+                    if(currentUploadedImagesArray.length > 0) window.transactions[index].imgDataList = currentUploadedImagesArray;
                 }
             } else {
-                transactions.push({ id: "TX-" + Date.now(), date, type, amount, notes, refNum, receipt, imgDataList: currentUploadedImagesArray });
+                window.transactions.push({ id: "TX-" + Date.now(), date, type, amount, notes, refNum, receipt, imgDataList: currentUploadedImagesArray });
             }
 
-            saveToLocalStorage();
             closeTransactionModal();
-            renderDashboard();
-            renderTransactions();
-            renderReports();
+            if (window.saveSystemDataToCloud) {
+                await window.saveSystemDataToCloud();
+            }
             showToast("Transaksi Berhasil Diperbarui");
         }
 
-        function deleteTransaction(id) {
-            if(confirm("Hapus transaksi ini?")) {
-                transactions = transactions.filter(t => t.id !== id);
-                saveToLocalStorage();
-                renderDashboard();
-                renderTransactions();
-                renderReports();
-                showToast("Transaksi berhasil dihapus");
+        window.deleteTransaction = async function(id) {
+            if(confirm("Hapus transaksi ini secara permanen dari Cloud?")) {
+                window.transactions = window.transactions.filter(t => t.id !== id);
+                if (window.saveSystemDataToCloud) {
+                    await window.saveSystemDataToCloud();
+                    showToast("Transaksi berhasil dihapus");
+                }
             }
         }
 
-        function renderDues() {
+        window.renderDues = function() {
             const tbody = document.getElementById('dues-table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
             let total = 0;
 
-            branchDues.forEach(b => {
+            window.branchDues.forEach(b => {
                 let monthsPaid = ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'agu', 'sep', 'okt', 'nov', 'des'].filter(m => b[m]).length;
                 total += (monthsPaid * 100000);
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-50 border-b border-gray-100";
+                tr.className = "hover:bg-gray-50 border-b border-gray-100 text-[11px]";
                 
                 let monthsHTML = ['jan', 'feb', 'mar', 'apr', 'mei', 'jun', 'jul', 'agu', 'sep', 'okt', 'nov', 'des'].map(m => `
-                    <td>
-                        <button onclick="toggleDueStatus('${b.id}', '${m}')" class="px-1 py-0.5 rounded text-[9px] font-bold w-10 transition duration-150 ${b[m] ? 'bg-blue-100 text-blue-800 hover:bg-blue-200':'bg-red-100 text-red-800 hover:bg-red-200'}">
+                    <td class="px-1 py-3 text-center">
+                        <button onclick="window.toggleDueStatus('${b.id}', '${m}')" class="px-1 py-0.5 rounded text-[9px] font-bold w-10 transition duration-150 ${b[m] ? 'bg-blue-100 text-blue-800 hover:bg-blue-200':'bg-red-100 text-red-800 hover:bg-red-200'}">
                             ${b[m] ? 'Lunas' : 'Belum'}
                         </button>
                     </td>
                 `).join('');
 
-                tr.innerHTML = `<td class="px-4 py-3 font-semibold text-left">${b.name}</td>` + monthsHTML + `<td class="px-4 py-3 font-bold text-right">${formatRupiah(monthsPaid * 100000)}</td>`;
+                tr.innerHTML = `<td class="px-4 py-3 font-semibold text-left flex items-center space-x-1 min-w-[120px]"><i class="fa-solid fa-map-location-dot text-[#0880a7] mr-1"></i>${b.name}</td>` + monthsHTML + `<td class="px-4 py-3 font-bold text-right min-w-[100px]">${formatRupiah(monthsPaid * 100000)}</td>`;
                 tbody.appendChild(tr);
             });
             document.getElementById('dues-current-realization').innerText = formatRupiah(total);
         }
 
-        function toggleDueStatus(branchId, month) {
-            const branch = branchDues.find(b => b.id === branchId);
+        window.toggleDueStatus = async function(branchId, month) {
+            const branch = window.branchDues.find(b => b.id === branchId);
             if (!branch) return;
             branch[month] = !branch[month];
-            saveToLocalStorage();
-            renderDues();
-            renderDashboard();
-            renderTransactions();
-            renderReports();
+            
+            if (window.saveSystemDataToCloud) {
+                await window.saveSystemDataToCloud();
+            }
         }
 
-        function renderRAB() {
+        window.renderRAB = function() {
             const container = document.getElementById('rab-container');
+            if(!container) return;
             container.innerHTML = '';
-            rabProjects.forEach(p => {
+            window.rabProjects.forEach(p => {
                 let progressAlloc = (p.allocated / p.target) * 100;
                 let progressSpent = (p.spent / p.allocated) * 100;
                 if(p.allocated === 0) progressSpent = 0;
@@ -1039,7 +977,7 @@
                             <span class="text-[10px] bg-amber-50 text-amber-800 font-bold px-2 py-0.5 rounded uppercase tracking-wide">Rencana Proyek Finansial</span>
                             <h3 class="text-lg font-bold text-slate-800 mt-1">${p.name}</h3>
                         </div>
-                        <button onclick="deleteRAB('${p.id}')" class="text-gray-300 hover:text-red-600 text-xs transition"><i class="fa-solid fa-trash-can"></i></button>
+                        <button onclick="window.deleteRAB('${p.id}')" class="text-gray-300 hover:text-red-600 text-xs transition"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                     <div class="grid grid-cols-3 gap-2 bg-gray-50/70 p-3 rounded-xl">
                         <div>
@@ -1090,33 +1028,35 @@
 
         function closeRABModal() { document.getElementById('rab-modal').classList.add('hidden'); }
 
-        function handleRABSubmit(e) {
+        window.handleRABSubmit = async function(e) {
             e.preventDefault();
             const name = document.getElementById('form-rab-name').value;
             const target = parseFloat(document.getElementById('form-rab-target').value);
             const allocated = parseFloat(document.getElementById('form-rab-alloc').value);
             const spent = parseFloat(document.getElementById('form-rab-spent').value || 0);
 
-            rabProjects.push({ id: "RAB-" + Date.now(), name, target, allocated, spent });
-            saveToLocalStorage();
+            window.rabProjects.push({ id: "RAB-" + Date.now(), name, target, allocated, spent });
             closeRABModal();
-            renderRAB();
+            if (window.saveSystemDataToCloud) {
+                await window.saveSystemDataToCloud();
+            }
             showToast("Proyek RAB baru berhasil dirancang");
         }
 
-        function deleteRAB(id) {
+        window.deleteRAB = async function(id) {
             if(confirm("Hapus rencana anggaran proyek ini?")) {
-                rabProjects = rabProjects.filter(r => r.id !== id);
-                saveToLocalStorage();
-                renderRAB();
+                window.rabProjects = window.rabProjects.filter(r => r.id !== id);
+                if (window.saveSystemDataToCloud) {
+                    await window.saveSystemDataToCloud();
+                }
             }
         }
 
-        function renderReports() {
+        window.renderReports = function() {
             const tbody = document.getElementById('rep-transactions-body');
             if(!tbody) return;
             tbody.innerHTML = '';
-            transactions.forEach(t => {
+            window.transactions.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 text-xs";
                 tr.innerHTML = `<td class="py-2 font-mono">${t.refNum}</td><td>${t.date}</td><td class="font-semibold">${t.notes}</td><td class="text-right text-blue-800">${t.type==='in'?formatRupiah(t.amount):'-'}</td><td class="text-right text-red-700">${t.type==='out'?formatRupiah(t.amount):'-'}</td>`;
@@ -1127,11 +1067,11 @@
         function resetTxFilters() {
             document.getElementById('tx-search').value = '';
             document.getElementById('tx-type-filter').value = 'all';
-            renderTransactions();
+            window.renderTransactions();
         }
 
         function exportToCSV() {
-            let csv = "No. Ref,Tanggal,Keterangan,Tipe,Nominal\n" + transactions.map(t => `"${t.refNum}","${t.date}","${t.notes}","${t.type==='in'?'Masuk':'Keluar'}",${t.amount}`).join("\n");
+            let csv = "No. Ref,Tanggal,Keterangan,Tipe,Nominal\n" + window.transactions.map(t => `"${t.refNum}","${t.date}","${t.notes}","${t.type==='in'?'Masuk':'Keluar'}",${t.amount}`).join("\n");
             let link = document.createElement("a");
             link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
             link.download = "Laporan_Bendahara_GMH_Jatim.csv";
