@@ -67,10 +67,10 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="hidden md:block text-right">
-                        <p class="text-xs text-blue-100" id="current-date-el">Rabu, 24 Juni 2026</p>
+                        <p class="text-xs text-blue-100" id="current-date-el">Memuat Tanggal...</p>
                         <p class="text-sm font-semibold text-amber-300"><i class="fa-solid fa-user-tie mr-1"></i> Bendahara PD</p>
                     </div>
-                    <button id="mobile-menu-toggle" class="md:hidden text-white hover:text-amber-300 focus:outline-none">
+                    <button id="mobile-menu-toggle" class="md:hidden text-white hover:text-amber-300 focus:outline-none p-2">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                 </div>
@@ -80,7 +80,7 @@
 
     <div class="flex flex-1 flex-col md:flex-row max-w-7xl w-full mx-auto px-0 sm:px-4 lg:px-8 py-4 sm:py-6 gap-6">
         
-        <aside id="sidebar" class="hidden md:block w-full md:w-64 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 shrink-0 self-start">
+        <aside id="sidebar" class="hidden md:block w-full md:w-64 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 shrink-0 self-start z-30">
             <div class="space-y-1">
                 <button onclick="switchTab('dashboard')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left bg-blue-50 text-[#0880a7]" data-tab="dashboard">
                     <i class="fa-solid fa-chart-pie w-5 text-lg"></i>
@@ -383,7 +383,7 @@
                             </div>
                         </div>
                         <div class="space-y-16">
-                            <p>Surabaya, 24 Juni 2026<br><b>Bendahara PD GMH JATIM</b></p>
+                            <p><span id="rep-date-place">Surabaya, ...</span><br><b>Bendahara PD GMH JATIM</b></p>
                             <div>
                                 <p class="font-bold underline" id="rep-treasurer-name">Haidar Ali Ahmad</p>
                                 <p class="text-gray-400 text-[10px]">NIM. 24112667</p>
@@ -538,6 +538,10 @@
         </div>
     </div>
 
+    <div id="toast" class="fixed bottom-4 right-4 bg-blue-900 text-white px-4 py-3 rounded-xl shadow-lg z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-amber-400 mr-1"></i> <span id="toast-text">Sukses</span>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -557,7 +561,6 @@
 
         window.db = db;
 
-        // PERBAIKAN UTAMA: Mengirimkan seluruh paket data (Transaksi, Iuran, RAB) ke server cloud Firebase
         window.saveSystemDataToCloud = async function() {
             try {
                 await setDoc(doc(db, "database_kas", "sistem_bendahara"), {
@@ -565,13 +568,12 @@
                     branchDues: window.branchDues,
                     rabProjects: window.rabProjects
                 });
-                console.log("Firebase Cloud Berhasil Disinkronkan secara Global!");
+                console.log("Firebase Cloud Berhasil Disinkronkan secara Menyeluruh!");
             } catch (err) {
                 console.error("Gagal sinkronisasi ke server Firebase:", err);
             }
         };
 
-        // REAL-TIME SNAPSHOT: Sinkronisasi instan antar laptop & HP secara permanen tanpa LocalStorage
         window.addEventListener('DOMContentLoaded', () => {
             onSnapshot(doc(db, "database_kas", "sistem_bendahara"), (docSnap) => {
                 if (docSnap.exists() && docSnap.data()) {
@@ -589,7 +591,6 @@
                     window.saveSystemDataToCloud();
                 }
                 
-                // Sinkronisasi render ulang ke layar antarmuka
                 window.renderDashboard();
                 window.renderTransactions();
                 window.renderReports();
@@ -600,7 +601,6 @@
     </script>
 
     <script>
-        // Cetakan dasar sistem
         window.defaultBranchDues = [
             { id: "PC-SBY", name: "PC Surabaya", jan: true, feb: true, mar: true, apr: true, mei: true, jun: true, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
             { id: "PC-MLG", name: "PC Malang", jan: true, feb: true, mar: true, apr: true, mei: true, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
@@ -615,15 +615,47 @@
             { id: "RAB-01", name: "Next Gen Leader", target: 10000000, allocated: 3000000, spent: 2000000 }
         ];
 
-        // VARIABEL UTAMA DINONAKTIFKAN DARI LOCALSTORAGE & SEPENUHNYA MEMBACA ARRAY FIREBASE CLOUD
         window.transactions = [];
         window.branchDues = [];
         window.rabProjects = [];
 
         let currentUploadedImagesArray = [];
         let cashflowChartObj = null;
+
+        // POIN 1: AMBIL DATA TANGGAL ASLI HARI INI SECARA REAL-TIME DARI KOMPUTER/HP
         let tglGlobal = new Date();
         const tanggalFormat = `${tglGlobal.getFullYear()}-${String(tglGlobal.getMonth() + 1).padStart(2, '0')}-${String(tglGlobal.getDate()).padStart(2, '0')}`;
+
+        window.onload = function() {
+            // Setup tanggal otomatis di Header
+            const opsiFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date-el').innerText = tglGlobal.toLocaleDateString('id-ID', opsiFormat);
+            
+            // Setup tempat/tanggal otomatis di Dokumen Cetak LPJ Keuangan
+            const opsiFormatLPJ = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('rep-date-place').innerText = "Surabaya, " + tglGlobal.toLocaleDateString('id-ID', opsiFormatLPJ);
+
+            window.renderDashboard();
+            window.renderTransactions();
+            window.renderDues();
+            window.renderRAB();
+            window.renderReports();
+            
+            // POIN 2: PERBAIKAN TOMBOL MENU GARIS TIGA SINKRON AMAN DI HP
+            document.getElementById("mobile-menu-toggle").onclick = function(e) {
+                e.stopPropagation();
+                document.getElementById("sidebar").classList.toggle("hidden");
+            };
+
+            // Klik di luar menu untuk menutup sidebar otomatis demi kenyamanan HP
+            document.addEventListener('click', function(e) {
+                const sidebar = document.getElementById("sidebar");
+                const toggleBtn = document.getElementById("mobile-menu-toggle");
+                if (window.innerWidth < 768 && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                    sidebar.classList.add("hidden");
+                }
+            });
+        }
 
         window.renderDashboard = function() {
             let incomesSum = window.transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
@@ -725,18 +757,16 @@
                 }
             });
 
-            if(id==='dashboard') window.renderDashboard(); 
-            if(id==='transactions') window.renderTransactions(); 
-            if(id==='reports') window.renderReports(); 
-            if(id==='rab') window.renderRAB(); 
-            if(id==='dues') window.renderDues(); 
-        }
+            // Sembunyikan sidebar otomatis setelah memilih menu di HP
+            if (window.innerWidth < 768) {
+                document.getElementById("sidebar").classList.add("hidden");
+            }
 
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            document.getElementById("toast-text").innerText = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+            if(id=='dashboard') window.renderDashboard(); 
+            if(id=='transactions') window.renderTransactions(); 
+            if(id=='reports') window.renderReports(); 
+            if(id=='rab') window.renderRAB(); 
+            if(id=='dues') window.renderDues(); 
         }
 
         function formatRupiah(num) {
@@ -750,7 +780,6 @@
             if (cashflowChartObj) cashflowChartObj.destroy();
 
             const sortedTx = [...window.transactions].sort((a,b) => new Date(a.date) - new Date(b.date));
-            
             let akumulasiMap = {};
             let akumulasiSaldo = 0;
 
@@ -768,7 +797,7 @@
             let listSaldo = Object.values(akumulasiMap);
 
             if(listTanggal.length === 0) {
-                listTanggal = ["24 Jun"];
+                listTanggal = [new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short'})];
                 listSaldo = [0];
             }
 
@@ -1059,7 +1088,7 @@
             window.transactions.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 text-xs";
-                tr.innerHTML = `<td class="py-2 font-mono">${t.refNum}</td><td>${t.date}</td><td class="font-semibold">${t.notes}</td><td class="text-right text-blue-800">${t.type==='in'?formatRupiah(t.amount):'-'}</td><td class="text-right text-red-700">${t.type==='out'?formatRupiah(t.amount):'-'}</td>`;
+                tr.innerHTML = `<td class="py-2 font-mono">${t.refNum}</td><td>${t.date}</td><td class="font-semibold">${t.notes}</td><td class="text-right font-bold text-blue-800">${t.type==='in'?formatRupiah(t.amount):'-'}</td><td class="text-right font-bold text-red-700">${t.type==='out'?formatRupiah(t.amount):'-'}</td>`;
                 tbody.appendChild(tr);
             });
         }
@@ -1074,7 +1103,7 @@
             let csv = "No. Ref,Tanggal,Keterangan,Tipe,Nominal\n" + window.transactions.map(t => `"${t.refNum}","${t.date}","${t.notes}","${t.type==='in'?'Masuk':'Keluar'}",${t.amount}`).join("\n");
             let link = document.createElement("a");
             link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-            link.download = "Laporan_Bendahara_GMH_Jatim.csv";
+            link.download = "Laporan_Bendahara_GMH_Jatip.csv";
             link.click();
         }
     </script>
