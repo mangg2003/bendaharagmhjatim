@@ -697,29 +697,47 @@
             buildCashflowChart();
         };
 
-        function displayMultipleFileNames(input) {
+       function displayMultipleFileNames(input) {
             const preview = document.getElementById('file-name-preview');
             preview.innerHTML = '';
             currentUploadedImagesArray = [];
 
             if (input.files && input.files.length > 0) {
                 preview.classList.remove('hidden');
-                let header = document.createElement('p');
-                header.className = "font-bold border-b border-blue-200 pb-1 text-blue-950 mb-1";
-                header.innerHTML = `<span>📂 Terpilih (${input.files.length} Foto Berkas)</span>`;
-                preview.appendChild(header);
+                preview.innerHTML = `<span class="text-blue-700 animate-pulse">⏳ Sedang memproses dokumen bukti asli...</span>`;
+                
+                const readPromises = Array.from(input.files).map(file => {
+                    return new Promise((resolve) => {
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            let img = new Image();
+                            img.onload = function() {
+                                let canvas = document.createElement('canvas');
+                                let ctx = canvas.getContext('2d');
+                                let MAX_WIDTH = 800;
+                                let MAX_HEIGHT = 600;
+                                let width = img.width;
+                                let height = img.height;
+                                if (width > height) {
+                                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                                } else {
+                                    if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                                }
+                                canvas.width = width;
+                                canvas.height = height;
+                                ctx.drawImage(img, 0, 0, width, height);
+                                let compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                                resolve(compressedBase64);
+                            };
+                            img.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                });
 
-                Array.from(input.files).forEach((file, idx) => {
-                    let fileRow = document.createElement('div');
-                    fileRow.className = "text-[9px] text-gray-700 truncate";
-                    fileRow.innerHTML = `<i class="fa-solid fa-image text-[#0880a7] mr-1"></i> ${idx+1}. ${file.name}`;
-                    preview.appendChild(fileRow);
-
-                    let reader = new FileReader();
-                    reader.onload = function(e) {
-                        currentUploadedImagesArray.push(e.target.result);
-                    };
-                    reader.readAsDataURL(file);
+                Promise.all(readPromises).then(base64Images => {
+                    currentUploadedImagesArray = base64Images;
+                    preview.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> <b>${input.files.length} Foto Berkas Berhasil Diproses!</b>`;
                 });
             } else {
                 preview.classList.add('hidden');
@@ -922,6 +940,13 @@
             const notes = document.getElementById('form-tx-notes').value;
             const receipt = document.getElementById('form-tx-receipt').checked;
 
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "⏳ Menyimpan ke Cloud...";
+            submitBtn.disabled = true;
+
+            let finalImgList = receipt ? currentUploadedImagesArray : [];
+
             if (id) {
                 const index = window.transactions.findIndex(t => t.id === id);
                 if (index !== -1) {
@@ -930,19 +955,29 @@
                     window.transactions[index].notes = notes;
                     window.transactions[index].refNum = refNum;
                     window.transactions[index].receipt = receipt;
-                    if(currentUploadedImagesArray.length > 0) window.transactions[index].imgDataList = currentUploadedImagesArray;
+                    window.transactions[index].imgDataList = finalImgList;
                 }
             } else {
-                window.transactions.push({ id: "TX-" + Date.now(), date, type, amount, notes, refNum, receipt, imgDataList: currentUploadedImagesArray });
+                window.transactions.push({ 
+                    id: "TX-" + Date.now(), 
+                    date, 
+                    type, 
+                    amount, 
+                    notes, 
+                    refNum, 
+                    receipt, 
+                    imgDataList: finalImgList 
+                });
             }
 
             closeTransactionModal();
             if (window.saveSystemDataToCloud) {
                 await window.saveSystemDataToCloud();
+                showToast("Transaksi Berhasil Disimpan ke Cloud!");
             }
-            showToast("Transaksi Berhasil Diperbarui");
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
         }
-
         window.deleteTransaction = async function(id) {
             if(confirm("Hapus transaksi ini secara permanen dari Cloud?")) {
                 window.transactions = window.transactions.filter(t => t.id !== id);
@@ -1085,10 +1120,28 @@
             const tbody = document.getElementById('rep-transactions-body');
             if(!tbody) return;
             tbody.innerHTML = '';
+            
+            // 1. Hitung total secara otomatis berdasarkan data transaksi yang ada
+            let incomesSum = window.transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
+            let expensesSum = window.transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
+            let totalKas = incomesSum - expensesSum;
+
+            // 2. Update angka di ringkasan laporan
+            document.getElementById('rep-incomes').innerText = formatRupiah(incomesSum);
+            document.getElementById('rep-expenses').innerText = formatRupiah(expensesSum);
+            document.getElementById('rep-net').innerText = formatRupiah(totalKas);
+
+            // 3. Render tabel detail transaksi
             window.transactions.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 text-xs";
-                tr.innerHTML = `<td class="py-2 font-mono">${t.refNum}</td><td>${t.date}</td><td class="font-semibold">${t.notes}</td><td class="text-right font-bold text-blue-800">${t.type==='in'?formatRupiah(t.amount):'-'}</td><td class="text-right font-bold text-red-700">${t.type==='out'?formatRupiah(t.amount):'-'}</td>`;
+                tr.innerHTML = `
+                    <td class="py-2 font-mono">${t.refNum}</td>
+                    <td>${t.date}</td>
+                    <td class="font-semibold">${t.notes}</td>
+                    <td class="text-right font-bold text-blue-800">${t.type==='in'?formatRupiah(t.amount):'-'}</td>
+                    <td class="text-right font-bold text-red-700">${t.type==='out'?formatRupiah(t.amount):'-'}</td>
+                `;
                 tbody.appendChild(tr);
             });
         }
