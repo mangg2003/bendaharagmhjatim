@@ -294,7 +294,7 @@
                                     <th class="px-1 py-3 font-semibold text-gray-500">Des</th>
                                     <th class="px-4 py-3 font-semibold text-gray-500 text-right min-w-[100px]">Total Setor</th>
                                 </tr>
-                            </thead>
+                            </tbody>
                             <tbody id="dues-table-body" class="divide-y divide-gray-100 bg-white">
                             </tbody>
                         </table>
@@ -571,6 +571,7 @@
                 console.log("Firebase Cloud Berhasil Disinkronkan secara Menyeluruh!");
             } catch (err) {
                 console.error("Gagal sinkronisasi ke server Firebase:", err);
+                throw err; // Lempar error agar ditangkap di handler submit
             }
         };
 
@@ -622,18 +623,16 @@
         let currentUploadedImagesArray = [];
         let cashflowChartObj = null;
 
-        // POIN 1: AMBIL DATA TANGGAL ASLI HARI INI SECARA REAL-TIME DARI KOMPUTER/HP
         let tglGlobal = new Date();
         const tanggalFormat = `${tglGlobal.getFullYear()}-${String(tglGlobal.getMonth() + 1).padStart(2, '0')}-${String(tglGlobal.getDate()).padStart(2, '0')}`;
 
         window.onload = function() {
-            // Setup tanggal otomatis di Header
             const opsiFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('current-date-el').innerText = tglGlobal.toLocaleDateString('id-ID', opsiFormat);
             
-            // Setup tempat/tanggal otomatis di Dokumen Cetak LPJ Keuangan
             const opsiFormatLPJ = { year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('rep-date-place').innerText = "Surabaya, " + tglGlobal.toLocaleDateString('id-ID', opsiFormatLPJ);
+            const datePlace = document.getElementById('rep-date-place');
+            if(datePlace) datePlace.innerText = "Surabaya, " + tglGlobal.toLocaleDateString('id-ID', opsiFormatLPJ);
 
             window.renderDashboard();
             window.renderTransactions();
@@ -641,17 +640,15 @@
             window.renderRAB();
             window.renderReports();
             
-            // POIN 2: PERBAIKAN TOMBOL MENU GARIS TIGA SINKRON AMAN DI HP
             document.getElementById("mobile-menu-toggle").onclick = function(e) {
                 e.stopPropagation();
                 document.getElementById("sidebar").classList.toggle("hidden");
             };
 
-            // Klik di luar menu untuk menutup sidebar otomatis demi kenyamanan HP
             document.addEventListener('click', function(e) {
                 const sidebar = document.getElementById("sidebar");
                 const toggleBtn = document.getElementById("mobile-menu-toggle");
-                if (window.innerWidth < 768 && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                if (window.innerWidth < 768 && sidebar && !sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
                     sidebar.classList.add("hidden");
                 }
             });
@@ -662,43 +659,52 @@
             let expensesSum = window.transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
             let totalKas = incomesSum - expensesSum;
 
-            document.getElementById('metric-balance').innerText = formatRupiah(totalKas);
-            document.getElementById('sidebar-balance').innerText = formatRupiah(totalKas);
-            document.getElementById('metric-incomes').innerText = formatRupiah(incomesSum);
-            document.getElementById('metric-expenses').innerText = formatRupiah(expensesSum);
+            const mb = document.getElementById('metric-balance');
+            const sb = document.getElementById('sidebar-balance');
+            const mi = document.getElementById('metric-incomes');
+            const me = document.getElementById('metric-expenses');
 
-            document.getElementById('metric-incomes-count').innerText = `${window.transactions.filter(t => t.type === 'in').length} transaksi`;
-            document.getElementById('metric-expenses-count').innerText = `${window.transactions.filter(t => t.type === 'out').length} transaksi`;
+            if(mb) mb.innerText = formatRupiah(totalKas);
+            if(sb) sb.innerText = formatRupiah(totalKas);
+            if(mi) mi.innerText = formatRupiah(incomesSum);
+            if(me) me.innerText = formatRupiah(expensesSum);
+
+            const mic = document.getElementById('metric-incomes-count');
+            const mec = document.getElementById('metric-expenses-count');
+            if(mic) mic.innerText = `${window.transactions.filter(t => t.type === 'in').length} transaksi`;
+            if(mec) mec.innerText = `${window.transactions.filter(t => t.type === 'out').length} transaksi`;
 
             const recentContainer = document.getElementById('recent-transactions-container');
-            recentContainer.innerHTML = '';
-            const sortedTx = [...window.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
-            
-            sortedTx.forEach(tx => {
-                const item = document.createElement('div');
-                item.className = "flex items-center justify-between p-3 rounded-xl bg-gray-50 text-xs";
-                item.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <div class="p-2 rounded-lg ${tx.type === 'in' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'}">
-                            <i class="fa-solid ${tx.type === 'in' ? 'fa-arrow-down-left' : 'fa-arrow-up-right-from-square'}"></i>
+            if(recentContainer) {
+                recentContainer.innerHTML = '';
+                const sortedTx = [...window.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+                
+                sortedTx.forEach(tx => {
+                    const item = document.createElement('div');
+                    item.className = "flex items-center justify-between p-3 rounded-xl bg-gray-50 text-xs";
+                    item.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 rounded-lg ${tx.type === 'in' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'}">
+                                <i class="fa-solid ${tx.type === 'in' ? 'fa-arrow-down-left' : 'fa-arrow-up-right-from-square'}"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">${tx.notes}</p>
+                                <p class="text-[10px] text-gray-400">${new Date(tx.date).toLocaleDateString('id-ID')}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-bold text-gray-800">${tx.notes}</p>
-                            <p class="text-[10px] text-gray-400">${new Date(tx.date).toLocaleDateString('id-ID')}</p>
-                        </div>
-                    </div>
-                    <span class="font-bold ${tx.type === 'in' ? 'text-blue-700' : 'text-red-600'}">
-                        ${tx.type === 'in' ? '+' : '-'}${formatRupiah(tx.amount)}
-                    </span>
-                `;
-                recentContainer.appendChild(item);
-            });
-
+                        <span class="font-bold ${tx.type === 'in' ? 'text-blue-700' : 'text-red-600'}">
+                            ${tx.type === 'in' ? '+' : '-'}${formatRupiah(tx.amount)}
+                        </span>
+                    `;
+                    recentContainer.appendChild(item);
+                });
+            }
             buildCashflowChart();
         };
 
-       function displayMultipleFileNames(input) {
+        function displayMultipleFileNames(input) {
             const preview = document.getElementById('file-name-preview');
+            if(!preview) return;
             preview.innerHTML = '';
             currentUploadedImagesArray = [];
 
@@ -747,12 +753,14 @@
         function toggleUploadField() {
             const checkbox = document.getElementById('form-tx-receipt');
             const uploadContainer = document.getElementById('upload-container');
-            if (checkbox.checked) {
-                uploadContainer.classList.remove('hidden');
+            if (checkbox && checkbox.checked) {
+                if(uploadContainer) uploadContainer.classList.remove('hidden');
             } else {
-                uploadContainer.classList.add('hidden');
-                document.getElementById('file-upload').value = '';
-                document.getElementById('file-name-preview').classList.add('hidden');
+                if(uploadContainer) uploadContainer.classList.add('hidden');
+                const fileInp = document.getElementById('file-upload');
+                if(fileInp) fileInp.value = '';
+                const pnv = document.getElementById('file-name-preview');
+                if(pnv) pnv.classList.add('hidden');
                 currentUploadedImagesArray = [];
             }
         }
@@ -775,9 +783,9 @@
                 }
             });
 
-            // Sembunyikan sidebar otomatis setelah memilih menu di HP
             if (window.innerWidth < 768) {
-                document.getElementById("sidebar").classList.add("hidden");
+                const sb = document.getElementById("sidebar");
+                if(sb) sb.classList.add("hidden");
             }
 
             if(id=='dashboard') window.renderDashboard(); 
@@ -842,19 +850,25 @@
         }
 
         window.renderTransactions = function() {
-            const query = document.getElementById('tx-search').value.toLowerCase();
-            const typeFilter = document.getElementById('tx-type-filter').value;
+            const searchInput = document.getElementById('tx-search');
+            const filterSelect = document.getElementById('tx-type-filter');
+            if(!searchInput || !filterSelect) return;
+
+            const query = searchInput.value.toLowerCase();
+            const typeFilter = filterSelect.value;
             const tbody = document.getElementById('tx-table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
 
             let filtered = window.transactions.filter(tx => {
-                return (tx.notes.toLowerCase().includes(query) || tx.refNum.toLowerCase().includes(query)) && (typeFilter === 'all' || tx.type === typeFilter);
+                return (tx.notes.toLowerCase().includes(query) || (tx.refNum && tx.refNum.toLowerCase().includes(query))) && (typeFilter === 'all' || tx.type === typeFilter);
             });
 
+            const emptyState = document.getElementById('tx-empty-state');
             if (filtered.length === 0) {
-                document.getElementById('tx-empty-state').classList.remove('hidden');
+                if(emptyState) emptyState.classList.remove('hidden');
             } else {
-                document.getElementById('tx-empty-state').classList.add('hidden');
+                if(emptyState) emptyState.classList.add('hidden');
                 filtered.forEach(tx => {
                     const row = document.createElement('tr');
                     row.className = "hover:bg-gray-50 border-b border-gray-100";
@@ -892,6 +906,7 @@
             if (!tx) return;
 
             const galleryContainer = document.getElementById('modal-preview-gallery');
+            if(!galleryContainer) return;
             galleryContainer.innerHTML = '';
 
             if (tx.imgDataList && tx.imgDataList.length > 0) {
@@ -924,12 +939,20 @@
             document.getElementById('form-tx-ref').value = "REF/GMH-JTM/" + Math.floor(Math.random() * 1000 + 10);
             document.getElementById('form-tx-amount').value = '';
             document.getElementById('form-tx-notes').value = '';
+            
+            const rcpt = document.getElementById('form-tx-receipt');
+            if(rcpt) rcpt.checked = false;
+            toggleUploadField();
+            
             currentUploadedImagesArray = [];
             document.getElementById('transaction-modal').classList.remove('hidden');
         }
 
         function closeTransactionModal() { document.getElementById('transaction-modal').classList.add('hidden'); }
 
+        // ===================================================================
+        // FIXED SINKRONISASI SUBMIT: PROTEKSI TOMBOL LOCK STUCK (TRY-CATCH-FINALLY)
+        // ===================================================================
         window.handleTransactionSubmit = async function(e) {
             e.preventDefault();
             const id = document.getElementById('form-tx-id').value;
@@ -941,49 +964,71 @@
             const receipt = document.getElementById('form-tx-receipt').checked;
 
             const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = "⏳ Menyimpan ke Cloud...";
+            const originalBtnText = submitBtn.innerHTML;
+            
+            // 1. Kunci tombol secara instant untuk mencegah double click/submit berulang di HP
+            submitBtn.innerHTML = "⏳ Menyimpan ke Cloud...";
             submitBtn.disabled = true;
 
             let finalImgList = receipt ? currentUploadedImagesArray : [];
 
-            if (id) {
-                const index = window.transactions.findIndex(t => t.id === id);
-                if (index !== -1) {
-                    window.transactions[index].date = date;
-                    window.transactions[index].amount = amount;
-                    window.transactions[index].notes = notes;
-                    window.transactions[index].refNum = refNum;
-                    window.transactions[index].receipt = receipt;
-                    window.transactions[index].imgDataList = finalImgList;
+            try {
+                // 2. Manipulasi State Lokal Data Buku Kas
+                if (id) {
+                    const index = window.transactions.findIndex(t => t.id === id);
+                    if (index !== -1) {
+                        window.transactions[index].date = date;
+                        window.transactions[index].amount = amount;
+                        window.transactions[index].notes = notes;
+                        window.transactions[index].refNum = refNum;
+                        window.transactions[index].receipt = receipt;
+                        window.transactions[index].imgDataList = finalImgList;
+                    }
+                } else {
+                    window.transactions.push({ 
+                        id: "TX-" + Date.now(), 
+                        date, 
+                        type, 
+                        amount, 
+                        notes, 
+                        refNum, 
+                        receipt, 
+                        imgDataList: finalImgList 
+                    });
                 }
-            } else {
-                window.transactions.push({ 
-                    id: "TX-" + Date.now(), 
-                    date, 
-                    type, 
-                    amount, 
-                    notes, 
-                    refNum, 
-                    receipt, 
-                    imgDataList: finalImgList 
-                });
-            }
 
-            closeTransactionModal();
-            if (window.saveSystemDataToCloud) {
-                await window.saveSystemDataToCloud();
-                showToast("Transaksi Berhasil Disimpan ke Cloud!");
+                // 3. Kirim Jaringan Asynchronous Payload ke Storage Firebase DB Cloud
+                if (window.saveSystemDataToCloud) {
+                    await window.saveSystemDataToCloud();
+                    
+                    // Tutup jendela popup modal secara bersih jika server sukses merespon
+                    closeTransactionModal();
+                    showToast("Transaksi Berhasil Disimpan ke Cloud!");
+                    
+                    // Re-render data view secara instant tanpa refresh halaman web
+                    window.renderDashboard();
+                    window.renderTransactions();
+                    window.renderReports();
+                }
+            } catch (err) {
+                console.error("Gagal sinkron data jaringan cloud server:", err);
+                alert("✕ Jaringan lambat atau Gagal Sinkronisasi ke Cloud. Silakan periksa koneksi internet Anda.");
+            } finally {
+                // 4. KUNCI UTAMA: Bagian ini dipaksa berjalan oleh browser untuk melepas proteksi tombol yang stuck
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
             }
-            submitBtn.innerText = originalBtnText;
-            submitBtn.disabled = false;
         }
+
         window.deleteTransaction = async function(id) {
             if(confirm("Hapus transaksi ini secara permanen dari Cloud?")) {
                 window.transactions = window.transactions.filter(t => t.id !== id);
                 if (window.saveSystemDataToCloud) {
                     await window.saveSystemDataToCloud();
                     showToast("Transaksi berhasil dihapus");
+                    window.renderDashboard();
+                    window.renderTransactions();
+                    window.renderReports();
                 }
             }
         }
@@ -1011,7 +1056,8 @@
                 tr.innerHTML = `<td class="px-4 py-3 font-semibold text-left flex items-center space-x-1 min-w-[120px]"><i class="fa-solid fa-map-location-dot text-[#0880a7] mr-1"></i>${b.name}</td>` + monthsHTML + `<td class="px-4 py-3 font-bold text-right min-w-[100px]">${formatRupiah(monthsPaid * 100000)}</td>`;
                 tbody.appendChild(tr);
             });
-            document.getElementById('dues-current-realization').innerText = formatRupiah(total);
+            const dcr = document.getElementById('dues-current-realization');
+            if(dcr) dcr.innerText = formatRupiah(total);
         }
 
         window.toggleDueStatus = async function(branchId, month) {
@@ -1021,6 +1067,7 @@
             
             if (window.saveSystemDataToCloud) {
                 await window.saveSystemDataToCloud();
+                window.renderDues();
             }
         }
 
@@ -1103,6 +1150,7 @@
             closeRABModal();
             if (window.saveSystemDataToCloud) {
                 await window.saveSystemDataToCloud();
+                window.renderRAB();
             }
             showToast("Proyek RAB baru berhasil dirancang");
         }
@@ -1112,6 +1160,7 @@
                 window.rabProjects = window.rabProjects.filter(r => r.id !== id);
                 if (window.saveSystemDataToCloud) {
                     await window.saveSystemDataToCloud();
+                    window.renderRAB();
                 }
             }
         }
@@ -1121,22 +1170,23 @@
             if(!tbody) return;
             tbody.innerHTML = '';
             
-            // 1. Hitung total secara otomatis berdasarkan data transaksi yang ada
             let incomesSum = window.transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
             let expensesSum = window.transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
             let totalKas = incomesSum - expensesSum;
 
-            // 2. Update angka di ringkasan laporan
-            document.getElementById('rep-incomes').innerText = formatRupiah(incomesSum);
-            document.getElementById('rep-expenses').innerText = formatRupiah(expensesSum);
-            document.getElementById('rep-net').innerText = formatRupiah(totalKas);
+            const ri = document.getElementById('rep-incomes');
+            const re = document.getElementById('rep-expenses');
+            const rn = document.getElementById('rep-net');
 
-            // 3. Render tabel detail transaksi
+            if(ri) ri.innerText = formatRupiah(incomesSum);
+            if(re) re.innerText = formatRupiah(expensesSum);
+            if(rn) rn.innerText = formatRupiah(totalKas);
+
             window.transactions.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 text-xs";
                 tr.innerHTML = `
-                    <td class="py-2 font-mono">${t.refNum}</td>
+                    <td class="py-2 font-mono">${t.refNum || '-'}</td>
                     <td>${t.date}</td>
                     <td class="font-semibold">${t.notes}</td>
                     <td class="text-right font-bold text-blue-800">${t.type==='in'?formatRupiah(t.amount):'-'}</td>
@@ -1158,6 +1208,17 @@
             link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
             link.download = "Laporan_Bendahara_GMH_Jatip.csv";
             link.click();
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            if(!toast || !toastText) return;
+            toastText.innerText = text;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
         }
     </script>
 </body>
