@@ -294,7 +294,7 @@
                                     <th class="px-1 py-3 font-semibold text-gray-500">Des</th>
                                     <th class="px-4 py-3 font-semibold text-gray-500 text-right min-w-[100px]">Total Setor</th>
                                 </tr>
-                            </tbody>
+                            </thead>
                             <tbody id="dues-table-body" class="divide-y divide-gray-100 bg-white">
                             </tbody>
                         </table>
@@ -571,7 +571,7 @@
                 console.log("Firebase Cloud Berhasil Disinkronkan secara Menyeluruh!");
             } catch (err) {
                 console.error("Gagal sinkronisasi ke server Firebase:", err);
-                throw err; // Lempar error agar ditangkap di handler submit
+                throw err;
             }
         };
 
@@ -951,7 +951,7 @@
         function closeTransactionModal() { document.getElementById('transaction-modal').classList.add('hidden'); }
 
         // ===================================================================
-        // FIXED SINKRONISASI SUBMIT: PROTEKSI TOMBOL LOCK STUCK (TRY-CATCH-FINALLY)
+        // SUBMIT TRANSAKSI DENGAN INTEGRASI CLOUD RE-FETCH SINKRONISASI AKTIF
         // ===================================================================
         window.handleTransactionSubmit = async function(e) {
             e.preventDefault();
@@ -966,55 +966,55 @@
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
             
-            // 1. Kunci tombol secara instant untuk mencegah double click/submit berulang di HP
             submitBtn.innerHTML = "⏳ Menyimpan ke Cloud...";
             submitBtn.disabled = true;
 
             let finalImgList = receipt ? currentUploadedImagesArray : [];
 
-            try {
-                // 2. Manipulasi State Lokal Data Buku Kas
-                if (id) {
-                    const index = window.transactions.findIndex(t => t.id === id);
-                    if (index !== -1) {
-                        window.transactions[index].date = date;
-                        window.transactions[index].amount = amount;
-                        window.transactions[index].notes = notes;
-                        window.transactions[index].refNum = refNum;
-                        window.transactions[index].receipt = receipt;
-                        window.transactions[index].imgDataList = finalImgList;
-                    }
-                } else {
-                    window.transactions.push({ 
-                        id: "TX-" + Date.now(), 
-                        date, 
-                        type, 
-                        amount, 
-                        notes, 
-                        refNum, 
-                        receipt, 
-                        imgDataList: finalImgList 
-                    });
-                }
+            // Simpan cadangan data lama untuk fallback jika cloud gagal
+            const backupTransactions = [...window.transactions];
 
-                // 3. Kirim Jaringan Asynchronous Payload ke Storage Firebase DB Cloud
+            if (id) {
+                const index = window.transactions.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    window.transactions[index].date = date;
+                    window.transactions[index].amount = amount;
+                    window.transactions[index].notes = notes;
+                    window.transactions[index].refNum = refNum;
+                    window.transactions[index].receipt = receipt;
+                    window.transactions[index].imgDataList = finalImgList;
+                }
+            } else {
+                window.transactions.push({ 
+                    id: "TX-" + Date.now(), 
+                    date, 
+                    type, 
+                    amount, 
+                    notes, 
+                    refNum, 
+                    receipt, 
+                    imgDataList: finalImgList 
+                });
+            }
+
+            try {
+                // KIRIM SINKRONISASI LANGSUNG KE FIREBASE CLOUD DB SERVER
                 if (window.saveSystemDataToCloud) {
                     await window.saveSystemDataToCloud();
                     
-                    // Tutup jendela popup modal secara bersih jika server sukses merespon
                     closeTransactionModal();
                     showToast("Transaksi Berhasil Disimpan ke Cloud!");
                     
-                    // Re-render data view secara instant tanpa refresh halaman web
                     window.renderDashboard();
                     window.renderTransactions();
                     window.renderReports();
                 }
             } catch (err) {
                 console.error("Gagal sinkron data jaringan cloud server:", err);
-                alert("✕ Jaringan lambat atau Gagal Sinkronisasi ke Cloud. Silakan periksa koneksi internet Anda.");
+                // Kembalikan ke state data sebelum error agar tidak merusak data lokal browser
+                window.transactions = backupTransactions;
+                alert("✕ Gagal Sinkronisasi ke Cloud. Silakan periksa koneksi internet atau kurangi resolusi ukuran foto kwitansi Anda.");
             } finally {
-                // 4. KUNCI UTAMA: Bagian ini dipaksa berjalan oleh browser untuk melepas proteksi tombol yang stuck
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
             }
@@ -1022,13 +1022,20 @@
 
         window.deleteTransaction = async function(id) {
             if(confirm("Hapus transaksi ini secara permanen dari Cloud?")) {
+                const backupTransactions = [...window.transactions];
                 window.transactions = window.transactions.filter(t => t.id !== id);
-                if (window.saveSystemDataToCloud) {
-                    await window.saveSystemDataToCloud();
-                    showToast("Transaksi berhasil dihapus");
-                    window.renderDashboard();
-                    window.renderTransactions();
-                    window.renderReports();
+                try {
+                    if (window.saveSystemDataToCloud) {
+                        await window.saveSystemDataToCloud();
+                        showToast("Transaksi berhasil dihapus");
+                        window.renderDashboard();
+                        window.renderTransactions();
+                        window.renderReports();
+                    }
+                } catch (err) {
+                    console.error("Gagal menghapus data dari cloud:", err);
+                    window.transactions = backupTransactions;
+                    alert("✕ Gagal menghapus data dari Cloud Server. Silakan coba lagi.");
                 }
             }
         }
@@ -1063,11 +1070,20 @@
         window.toggleDueStatus = async function(branchId, month) {
             const branch = window.branchDues.find(b => b.id === branchId);
             if (!branch) return;
+            
+            // Toggle status lokal
             branch[month] = !branch[month];
             
-            if (window.saveSystemDataToCloud) {
-                await window.saveSystemDataToCloud();
-                window.renderDues();
+            try {
+                if (window.saveSystemDataToCloud) {
+                    await window.saveSystemDataToCloud();
+                    window.renderDues();
+                }
+            } catch (err) {
+                console.error("Gagal memperbarui status iuran ke cloud:", err);
+                // Kembalikan nilai lokal jika gagal sinkronisasi cloud
+                branch[month] = !branch[month];
+                alert("✕ Gagal menyimpan status iuran ke Cloud Server.");
             }
         }
 
@@ -1148,19 +1164,30 @@
 
             window.rabProjects.push({ id: "RAB-" + Date.now(), name, target, allocated, spent });
             closeRABModal();
-            if (window.saveSystemDataToCloud) {
-                await window.saveSystemDataToCloud();
-                window.renderRAB();
+            try {
+                if (window.saveSystemDataToCloud) {
+                    await window.saveSystemDataToCloud();
+                    window.renderRAB();
+                    showToast("Proyek RAB baru berhasil dirancang");
+                }
+            } catch (err) {
+                window.rabProjects.pop();
+                alert("✕ Gagal menyimpan rancangan RAB ke cloud. Silakan periksa kembali koneksi internet Anda.");
             }
-            showToast("Proyek RAB baru berhasil dirancang");
         }
 
         window.deleteRAB = async function(id) {
             if(confirm("Hapus rencana anggaran proyek ini?")) {
+                const backupRAB = [...window.rabProjects];
                 window.rabProjects = window.rabProjects.filter(r => r.id !== id);
-                if (window.saveSystemDataToCloud) {
-                    await window.saveSystemDataToCloud();
-                    window.renderRAB();
+                try {
+                    if (window.saveSystemDataToCloud) {
+                        await window.saveSystemDataToCloud();
+                        window.renderRAB();
+                    }
+                } catch (err) {
+                    window.rabProjects = backupRAB;
+                    alert("✕ Gagal menghapus proyek RAB dari cloud server.");
                 }
             }
         }
