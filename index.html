@@ -53,378 +53,430 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
-    <header class="bg-[#0880a7] text-white sticky top-0 z-40 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-white p-1 rounded-full flex items-center justify-center w-10 h-10 shadow shrink-0">
-                        <img src="Logo GMH.png" alt="Logo GMH JAWA TIMUR" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h1 class="text-sm sm:text-lg font-bold leading-tight tracking-wide">GMH JATIM</h1>
-                        <p class="text-[9px] sm:text-xs text-blue-100">Sistem Keuangan Bendahara Daerah</p>
+    <div id="login-screen" class="fixed inset-0 bg-gradient-to-br from-[#0880a7] via-slate-900 to-blue-950 z-50 flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 space-y-6 border border-white/20 relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-[#0880a7]/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="text-center space-y-3">
+                <div class="mx-auto bg-gradient-to-tr from-[#0880a7] to-cyan-600 p-0.5 rounded-full flex items-center justify-center w-20 h-20 shadow-xl border-4 border-white">
+                    <img src="Logo GMH.png" alt="Logo GMH" class="w-full h-full object-contain p-2 bg-white rounded-full" onerror="this.src='https://placehold.co/150x150/0880a7/ffffff?text=GMH'">
+                </div>
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-950 tracking-wide uppercase">Sistem Keuangan Daerah</h2>
+                    <p class="text-xs text-gray-500 font-medium">Gerakan Mahasiswa Hidayatullah Jawa Timur</p>
+                </div>
+            </div>
+
+            <hr class="border-gray-100">
+
+            <form onsubmit="handlePortalLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fa-solid fa-user-shield mr-1 text-[#0880a7]"></i> ID / Username</label>
+                    <input type="text" id="login-username" placeholder="Masukkan ID Bendahara" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"><i class="fa-solid fa-lock mr-1 text-[#0880a7]"></i> Password Akses</label>
+                    <div class="relative">
+                        <input type="password" id="login-password" placeholder="••••••••" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <button type="button" onclick="toggleLoginPassword()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-slate-600"><i id="lock-icon" class="fa-solid fa-eye text-xs"></i></button>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div class="hidden md:block text-right">
-                        <p class="text-xs text-blue-100" id="current-date-el">Memuat Tanggal...</p>
-                        <p class="text-sm font-semibold text-amber-300"><i class="fa-solid fa-user-tie mr-1"></i> Bendahara PD</p>
-                    </div>
-                    <button id="mobile-menu-toggle" class="md:hidden text-white hover:text-amber-300 focus:outline-none p-2">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
+
+                <div id="login-error-msg" class="hidden text-center bg-red-50 text-red-600 text-[11px] font-semibold p-3 rounded-xl border border-red-100 animate-pulse">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> ID Pengurus atau Password Akses Salah!
                 </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-[#0880a7] to-blue-700 hover:to-blue-800 text-white font-bold text-xs py-3.5 px-4 rounded-xl shadow-lg hover:shadow-xl transition duration-200 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-key text-amber-400"></i>
+                    <span>Verifikasi Hak Akses</span>
+                </button>
+            </form>
+
+            <div class="text-center">
+                <p class="text-[10px] text-gray-400 font-medium">Protected by GMH JATIM Security System &copy; 2026</p>
             </div>
         </div>
-    </header>
+    </div>
 
-    <div class="flex flex-1 flex-col md:flex-row max-w-7xl w-full mx-auto px-0 sm:px-4 lg:px-8 py-4 sm:py-6 gap-6">
-        
-        <aside id="sidebar" class="hidden md:block w-full md:w-64 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 shrink-0 self-start z-30">
-            <div class="space-y-1">
-                <button onclick="switchTab('dashboard')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left bg-blue-50 text-[#0880a7]" data-tab="dashboard">
-                    <i class="fa-solid fa-chart-pie w-5 text-lg"></i>
-                    <span>Dashboard Utama</span>
-                </button>
-                <button onclick="switchTab('transactions')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="transactions">
-                    <i class="fa-solid fa-wallet w-5 text-lg"></i>
-                    <span>Pencatatan Buku Kas</span>
-                </button>
-                <button onclick="switchTab('dues')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="dues">
-                    <i class="fa-solid fa-users-rectangle w-5 text-lg"></i>
-                    <span>Iuran PC Se-JATIM</span>
-                </button>
-                <button onclick="switchTab('rab')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="rab">
-                    <i class="fa-solid fa-list-check w-5 text-lg"></i>
-                    <span>Perencanaan RAB</span>
-                </button>
-                <button onclick="switchTab('reports')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="reports">
-                    <i class="fa-solid fa-file-invoice-dollar w-5 text-lg"></i>
-                    <span>Laporan Keuangan</span>
-                </button>
-                <button onclick="switchTab('admin-panel')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="admin-panel">
-                    <i class="fa-solid fa-user-shield w-5 text-lg text-amber-500"></i>
-                    <span>Admin Bendahara</span>
-                </button>
-            </div>
-            
-            <hr class="my-4 border-gray-100">
-            
-            <div class="bg-gradient-to-br from-[#0880a7] to-blue-900 text-white p-4 rounded-xl shadow-sm">
-                <span class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Kas Terkini PD GMH Jatim</span>
-                <p class="text-lg font-bold mt-1" id="sidebar-balance">Rp 0</p>
-                <div class="mt-2 text-[11px] text-blue-100">
-                    <p><i class="fa-solid fa-calendar-check mr-1 text-amber-400"></i> Status: Aman & Terkendali</p>
-                </div>
-            </div>
-        </aside>
 
-        <main class="flex-1 bg-white md:rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 min-h-[500px]">
-            
-            <div id="page-dashboard" class="space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-gradient-to-tr from-[#0880a7] to-blue-700 text-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
-                        <div class="absolute right-0 top-0 translate-x-3 -translate-y-3 opacity-15 text-9xl">
-                            <i class="fa-solid fa-scale-balanced"></i>
+    <div id="main-web-content" class="hidden flex-col min-h-screen">
+        <header class="bg-[#0880a7] text-white sticky top-0 z-40 shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-white p-1 rounded-full flex items-center justify-center w-10 h-10 shadow shrink-0">
+                            <img src="Logo GMH.png" alt="Logo GMH JAWA TIMUR" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/100x100/0880a7/ffffff?text=GMH'">
                         </div>
-                        <span class="text-xs text-blue-100 uppercase tracking-wider font-semibold">Total Saldo Kas Kas</span>
-                        <h3 class="text-2xl sm:text-3xl font-extrabold mt-2" id="metric-balance">Rp 0</h3>
-                        <p class="text-xs text-blue-200 mt-2"><i class="fa-solid fa-circle-arrow-up text-amber-300 mr-1"></i> Update otomatis dari buku kas</p>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
                         <div>
-                            <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Total Pemasukan</span>
-                            <h3 class="text-xl sm:text-2xl font-bold mt-2 text-[#0880a7]" id="metric-incomes">Rp 0</h3>
-                            <p class="text-xs text-gray-500 mt-1" id="metric-incomes-count">0 transaksi</p>
-                        </div>
-                        <div class="bg-blue-50 text-[#0880a7] p-4 rounded-xl">
-                            <i class="fa-solid fa-arrow-down-left text-2xl"></i>
+                            <h1 class="text-sm sm:text-lg font-bold leading-tight tracking-wide">GMH JATIM</h1>
+                            <p class="text-[9px] sm:text-xs text-blue-100">Sistem Keuangan Bendahara Daerah</p>
                         </div>
                     </div>
-
-                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Total Pengeluaran</span>
-                            <h3 class="text-xl sm:text-2xl font-bold mt-2 text-red-600" id="metric-expenses">Rp 0</h3>
-                            <p class="text-xs text-gray-500 mt-1" id="metric-expenses-count">0 transaksi</p>
+                    <div class="flex items-center space-x-4">
+                        <div class="hidden md:block text-right">
+                            <p class="text-xs text-blue-100" id="current-date-el">Memuat Tanggal...</p>
+                            <p class="text-sm font-semibold text-amber-300"><i class="fa-solid fa-user-tie mr-1"></i> Bendahara PD</p>
                         </div>
-                        <div class="bg-red-50 text-red-600 p-4 rounded-xl">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 gap-6">
-                    <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
-                        <h4 class="font-bold text-gray-700 text-sm mb-4"><i class="fa-solid fa-chart-line text-[#0880a7] mr-2"></i>Arus Kas Bulan Ini</h4>
-                        <div class="h-64 relative">
-                            <canvas id="cashflow-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-history text-[#0880a7] mr-2"></i>Mutasi Kas Terakhir</h4>
-                            <button onclick="switchTab('transactions')" class="text-xs text-[#0880a7] font-semibold hover:underline">Semua Transaksi &rarr;</button>
-                        </div>
-                        <div class="space-y-3" id="recent-transactions-container">
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center space-x-2 text-blue-900 font-bold mb-2">
-                                <i class="fa-solid fa-lightbulb"></i>
-                                <span>Tips Operasional Bendahara</span>
-                            </div>
-                            <p class="text-xs text-blue-950 leading-relaxed">
-                                Pastikan berkas pendukung diunggah lengkap. Sekarang pembukuan mendukung multi-upload foto bukti transaksi untuk kebutuhan validasi laporan pertanggungjawaban yang akuntabel.
-                            </p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3 mt-4">
-                            <button onclick="switchTab('transactions'); openAddTransactionModal('in');" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded-xl transition flex items-center justify-center space-x-1">
-                                <i class="fa-solid fa-plus"></i> <span>Pemasukan</span>
-                            </button>
-                            <button onclick="switchTab('transactions'); openAddTransactionModal('out');" class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-2 px-3 rounded-xl transition flex items-center justify-center space-x-1">
-                                <i class="fa-solid fa-minus"></i> <span>Pengeluaran</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-transactions" class="space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-800">Buku Kas Utama PD GMH JATIM</h2>
-                        <p class="text-xs text-gray-500">Catat dan pantau seluruh pemasukan dan pengeluaran GMH JATIM.</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="openAddTransactionModal('in')" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
-                            <i class="fa-solid fa-plus"></i> <span>Tambah Pemasukan</span>
+                        <button onclick="handlePortalLogout()" class="text-xs bg-red-600/20 border border-red-500/30 hover:bg-red-600 text-white px-3 py-1.5 rounded-xl transition duration-150 font-medium flex items-center space-x-1">
+                            <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline">Keluar</span>
                         </button>
-                        <button onclick="openAddTransactionModal('out')" class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
-                            <i class="fa-solid fa-minus"></i> <span>Tambah Pengeluaran</span>
+                        <button id="mobile-menu-toggle" class="md:hidden text-white hover:text-amber-300 focus:outline-none p-2">
+                            <i class="fa-solid fa-bars text-xl"></i>
                         </button>
                     </div>
                 </div>
-
-                <div class="bg-gray-50 p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="flex flex-1 flex-col sm:flex-row gap-3">
-                        <input type="text" id="tx-search" oninput="renderTransactions()" placeholder="Cari keterangan atau no ref..." class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1">
-                        <select id="tx-type-filter" onchange="renderTransactions()" class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="all">Semua Tipe</option>
-                            <option value="in">Hanya Pemasukan</option>
-                            <option value="out">Hanya Pengeluaran</option>
-                        </select>
-                    </div>
-                    <button onclick="resetTxFilters()" class="text-xs text-gray-500 hover:text-blue-700 font-semibold"><i class="fa-solid fa-rotate-left mr-1"></i> Reset</button>
-                </div>
-
-                <div class="overflow-x-auto border border-gray-100 rounded-2xl">
-                    <table class="min-w-full divide-y divide-gray-100 text-left text-xs">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-4 py-3 font-semibold text-gray-500">No. Ref</th>
-                                <th class="px-4 py-3 font-semibold text-gray-500">Tanggal</th>
-                                <th class="px-4 py-3 font-semibold text-gray-500">Keterangan</th>
-                                <th class="px-4 py-3 font-semibold text-gray-500">Jumlah</th>
-                                <th class="px-4 py-3 font-semibold text-gray-500">Bukti Berkas</th>
-                                <th class="px-4 py-3 font-semibold text-gray-500 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tx-table-body" class="divide-y divide-gray-100">
-                        </tbody>
-                    </table>
-                    <div id="tx-empty-state" class="hidden p-8 text-center text-gray-500">
-                        <i class="fa-solid fa-folder-open text-4xl mb-2 text-gray-300"></i>
-                        <p>Tidak ada transaksi yang cocok dengan kriteria filter.</p>
-                    </div>
-                </div>
             </div>
+        </header>
 
-            <div id="page-dues" class="space-y-6 hidden">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">Iuran Wajib PD GMH JATIM</h2>
-                    <p class="text-xs text-gray-500">Pelacakan setoran iuran rutin bulanan dari Pengurus Cabang (Kabupaten/Kota) se-Jawa Timur.</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
-                        <span class="text-[10px] uppercase font-bold text-amber-700">Target Bulanan PD</span>
-                        <h4 class="text-lg font-bold text-amber-950 mt-1" id="dues-target">Rp 1.500.000</h4>
-                        <p class="text-xs text-amber-800 mt-1">Rp 100.000 per Cabang aktif</p>
-                    </div>
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                        <span class="text-[10px] uppercase font-bold text-blue-700">Realisasi Tahun Ini</span>
-                        <h4 class="text-lg font-bold text-blue-950 mt-1" id="dues-current-realization">Rp 0</h4>
-                        <p class="text-xs text-blue-800 mt-1">Dari akumulasi seluruh bulan yang melunasi</p>
-                    </div>
-                    <div class="bg-gray-50 border border-gray-100 rounded-xl p-4">
-                        <span class="text-[10px] uppercase font-bold text-gray-600">Total Cabang Aktif</span>
-                        <h4 class="text-lg font-bold text-gray-800 mt-1" id="dues-active-branches">7 PC</h4>
-                        <p class="text-xs text-gray-500 mt-1">Surabaya, Malang, Jember, dll</p>
-                    </div>
-                </div>
-
-                <div class="border border-gray-100 rounded-2xl overflow-hidden">
-                    <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
-                        <h3 class="text-xs font-semibold text-gray-700 uppercase">Status Pembayaran Iuran Per Cabang (12 Bulan - Tahun 2026)</h3>
-                        <span class="text-[10px] text-gray-400">Klik status bulan untuk mengubah (Lunas / Belum)</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-100 text-center text-[11px]">
-                            <thead class="bg-white">
-                                <tr>
-                                    <th class="px-4 py-3 font-semibold text-gray-500 text-left min-w-[120px]">Nama Cabang (PC)</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Jan</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Feb</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Mar</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Apr</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Mei</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Jun</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Jul</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Agu</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Sep</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Okt</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Nov</th>
-                                    <th class="px-1 py-3 font-semibold text-gray-500">Des</th>
-                                    <th class="px-4 py-3 font-semibold text-gray-500 text-right min-w-[100px]">Total Setor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dues-table-body" class="divide-y divide-gray-100 bg-white">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-rab" class="space-y-6 hidden">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-800">Rencana Anggaran Biaya (RAB) Program Kerja</h2>
-                        <p class="text-xs text-gray-500">Monitor kesiapan finansial dan realisasi dana untuk setiap agenda PD GMH JATIM.</p>
-                    </div>
-                    <button onclick="openAddRABModal()" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
-                        <i class="fa-solid fa-plus"></i> <span>Buat Proyek RAB</span>
+        <div class="flex flex-1 flex-col md:flex-row max-w-7xl w-full mx-auto px-0 sm:px-4 lg:px-8 py-4 sm:py-6 gap-6">
+            
+            <aside id="sidebar" class="hidden md:block w-full md:w-64 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 shrink-0 self-start z-30">
+                <div class="space-y-1">
+                    <button onclick="switchTab('dashboard')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left bg-blue-50 text-[#0880a7]" data-tab="dashboard">
+                        <i class="fa-solid fa-chart-pie w-5 text-lg"></i>
+                        <span>Dashboard Utama</span>
+                    </button>
+                    <button onclick="switchTab('transactions')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="transactions">
+                        <i class="fa-solid fa-wallet w-5 text-lg"></i>
+                        <span>Pencatatan Buku Kas</span>
+                    </button>
+                    <button onclick="switchTab('dues')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="dues">
+                        <i class="fa-solid fa-users-rectangle w-5 text-lg"></i>
+                        <span>Iuran PC Se-JATIM</span>
+                    </button>
+                    <button onclick="switchTab('rab')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="rab">
+                        <i class="fa-solid fa-list-check w-5 text-lg"></i>
+                        <span>Perencanaan RAB</span>
+                    </button>
+                    <button onclick="switchTab('reports')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="reports">
+                        <i class="fa-solid fa-file-invoice-dollar w-5 text-lg"></i>
+                        <span>Laporan Keuangan</span>
+                    </button>
+                    <button onclick="switchTab('admin-panel')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition duration-150 font-medium text-sm text-left text-gray-600 hover:bg-gray-50" data-tab="admin-panel">
+                        <i class="fa-solid fa-user-shield w-5 text-lg text-amber-500"></i>
+                        <span>Admin Bendahara</span>
                     </button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="rab-container"></div>
-            </div>
+                
+                <hr class="my-4 border-gray-100">
+                
+                <div class="bg-gradient-to-br from-[#0880a7] to-blue-900 text-white p-4 rounded-xl shadow-sm">
+                    <span class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Kas Terkini PD GMH Jatim</span>
+                    <p class="text-lg font-bold mt-1" id="sidebar-balance">Rp 0</p>
+                    <div class="mt-2 text-[11px] text-blue-100">
+                        <p><i class="fa-solid fa-calendar-check mr-1 text-amber-400"></i> Status: Aman & Terkendali</p>
+                    </div>
+                </div>
+            </aside>
 
-            <div id="page-reports" class="space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-800">Dokumen & Laporan Keuangan PD GMH JATIM</h2></div>
-                    <div class="flex gap-2">
-                        <button onclick="exportToCSV()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2 border border-gray-200">
-                            <i class="fa-solid fa-file-excel text-green-700"></i> <span>Ekspor ke CSV</span>
-                        </button>
-                        <button onclick="window.print()" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
-                            <i class="fa-solid fa-print"></i> <span>Cetak Laporan</span>
-                        </button>
+            <main class="flex-1 bg-white md:rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 min-h-[500px]">
+                
+                <div id="page-dashboard" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-gradient-to-tr from-[#0880a7] to-blue-700 text-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
+                            <div class="absolute right-0 top-0 translate-x-3 -translate-y-3 opacity-15 text-9xl">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                            </div>
+                            <span class="text-xs text-blue-100 uppercase tracking-wider font-semibold">Total Saldo Kas Kas</span>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold mt-2" id="metric-balance">Rp 0</h3>
+                            <p class="text-xs text-blue-200 mt-2"><i class="fa-solid fa-circle-arrow-up text-amber-300 mr-1"></i> Update otomatis dari buku kas</p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Total Pemasukan</span>
+                                <h3 class="text-xl sm:text-2xl font-bold mt-2 text-[#0880a7]" id="metric-incomes">Rp 0</h3>
+                                <p class="text-xs text-gray-500 mt-1" id="metric-incomes-count">0 transaksi</p>
+                            </div>
+                            <div class="bg-blue-50 text-[#0880a7] p-4 rounded-xl">
+                                <i class="fa-solid fa-arrow-down-left text-2xl"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Total Pengeluaran</span>
+                                <h3 class="text-xl sm:text-2xl font-bold mt-2 text-red-600" id="metric-expenses">Rp 0</h3>
+                                <p class="text-xs text-gray-500 mt-1" id="metric-expenses-count">0 transaksi</p>
+                            </div>
+                            <div class="bg-red-50 text-red-600 p-4 rounded-xl">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+                            <h4 class="font-bold text-gray-700 text-sm mb-4"><i class="fa-solid fa-chart-line text-[#0880a7] mr-2"></i>Arus Kas Bulan Ini</h4>
+                            <div class="h-64 relative">
+                                <canvas id="cashflow-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="font-bold text-gray-700 text-sm"><i class="fa-solid fa-history text-[#0880a7] mr-2"></i>Mutasi Kas Terakhir</h4>
+                                <button onclick="switchTab('transactions')" class="text-xs text-[#0880a7] font-semibold hover:underline">Semua Transaksi &rarr;</button>
+                            </div>
+                            <div class="space-y-3" id="recent-transactions-container">
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center space-x-2 text-blue-900 font-bold mb-2">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                    <span>Tips Operasional Bendahara</span>
+                                </div>
+                                <p class="text-xs text-blue-950 leading-relaxed">
+                                    Pastikan berkas pendukung diunggah lengkap. Sekarang pembukuan mendukung multi-upload foto bukti transaksi untuk kebutuhan validasi laporan pertanggungjawaban yang akuntabel.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 mt-4">
+                                <button onclick="switchTab('transactions'); openAddTransactionModal('in');" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded-xl transition flex items-center justify-center space-x-1">
+                                    <i class="fa-solid fa-plus"></i> <span>Pemasukan</span>
+                                </button>
+                                <button onclick="switchTab('transactions'); openAddTransactionModal('out');" class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-2 px-3 rounded-xl transition flex items-center justify-center space-x-1">
+                                    <i class="fa-solid fa-minus"></i> <span>Pengeluaran</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-8" id="report-print-area">
-                    <div class="text-center space-y-2 border-b-2 border-double border-blue-800 pb-6">
-                        <h3 class="text-lg font-bold uppercase tracking-wider text-blue-950">GERAKAN MAHASISWA HIDAYATULLAH</h3>
-                        <h4 class="text-md font-extrabold uppercase text-[#0880a7]">PENGURUS DAERAH JAWA TIMUR</h4>
-                        <p class="text-xs text-gray-500">Sekretariat: Jl. Kejawan Putih Tambak, Mulyorejo, Surabaya, Jawa Timur | Telp: +62 821-4247-6196</p>
-                        <div class="text-xs font-semibold bg-blue-50 text-[#0880a7] py-1 px-3 inline-block rounded-full mt-2">
-                            LAPORAN PERTANGGUNGJAWABAN KEUANGAN KAS TAHUNAN 2026
+                <div id="page-transactions" class="space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">Buku Kas Utama PD GMH JATIM</h2>
+                            <p class="text-xs text-gray-500">Catat dan pantau seluruh pemasukan dan pengeluaran GMH JATIM.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openAddTransactionModal('in')" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
+                                <i class="fa-solid fa-plus"></i> <span>Tambah Pemasukan</span>
+                            </button>
+                            <button onclick="openAddTransactionModal('out')" class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
+                                <i class="fa-solid fa-minus"></i> <span>Tambah Pengeluaran</span>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <h5 class="font-bold text-sm text-gray-700 uppercase tracking-wide border-b border-gray-100 pb-2"><i class="fa-solid fa-scale-balanced mr-2 text-[#0880a7]"></i>1. Ringkasan Kas Akhir</h5>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-                            <div class="bg-gray-50 p-3 rounded-lg">
-                                <span class="text-gray-400">Total Pemasukan</span>
-                                <p class="text-sm font-bold text-[#0880a7] mt-1" id="rep-incomes">Rp 0</p>
-                            </div>
-                            <div class="bg-gray-50 p-3 rounded-lg">
-                                <span class="text-gray-400">Total Pengeluaran</span>
-                                <p class="text-sm font-bold text-red-700 mt-1" id="rep-expenses">Rp 0</p>
-                            </div>
-                            <div class="bg-gray-50 p-3 rounded-lg">
-                                <span class="text-gray-400">Kas Bersih Saat Ini</span>
-                                <p class="text-sm font-bold text-gray-800 mt-1" id="rep-net">Rp 0</p>
-                            </div>
+                    <div class="bg-gray-50 p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex flex-1 flex-col sm:flex-row gap-3">
+                            <input type="text" id="tx-search" oninput="renderTransactions()" placeholder="Cari keterangan atau no ref..." class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 flex-1">
+                            <select id="tx-type-filter" onchange="renderTransactions()" class="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="all">Semua Tipe</option>
+                                <option value="in">Hanya Pemasukan</option>
+                                <option value="out">Hanya Pengeluaran</option>
+                            </select>
                         </div>
+                        <button onclick="resetTxFilters()" class="text-xs text-gray-500 hover:text-blue-700 font-semibold"><i class="fa-solid fa-rotate-left mr-1"></i> Reset</button>
                     </div>
 
-                    <div class="space-y-4">
-                        <h5 class="font-bold text-sm text-gray-700 uppercase tracking-wide border-b border-gray-100 pb-2"><i class="fa-solid fa-list-ol mr-2 text-[#0880a7]"></i>2. Rincian Alur Keluar Masuk Dana</h5>
-                        <table class="min-w-full text-xs text-left">
-                            <thead>
-                                <tr class="border-b border-gray-200">
-                                    <th class="py-2 font-bold text-gray-700">Ref</th>
-                                    <th class="py-2 font-bold text-gray-700">Tanggal</th>
-                                    <th class="py-2 font-bold text-gray-700">Keterangan</th>
-                                    <th class="py-2 font-bold text-gray-700 text-right">Debit (Masuk)</th>
-                                    <th class="py-2 font-bold text-gray-700 text-right">Kredit (Keluar)</th>
+                    <div class="overflow-x-auto border border-gray-100 rounded-2xl">
+                        <table class="min-w-full divide-y divide-gray-100 text-left text-xs">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 font-semibold text-gray-500">No. Ref</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-500">Tanggal</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-500">Keterangan</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-500">Jumlah</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-500">Bukti Berkas</th>
+                                    <th class="px-4 py-3 font-semibold text-gray-500 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="rep-transactions-body" class="divide-y divide-gray-100">
+                            <tbody id="tx-table-body" class="divide-y divide-gray-100">
                             </tbody>
                         </table>
+                        <div id="tx-empty-state" class="hidden p-8 text-center text-gray-500">
+                            <i class="fa-solid fa-folder-open text-4xl mb-2 text-gray-300"></i>
+                            <p>Tidak ada transaksi yang cocok dengan kriteria filter.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="page-dues" class="space-y-6 hidden">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Iuran Wajib PD GMH JATIM</h2>
+                        <p class="text-xs text-gray-500">Pelacakan setoran iuran rutin bulanan dari Pengurus Cabang (Kabupaten/Kota) se-Jawa Timur.</p>
                     </div>
 
-                    <div class="pt-12 grid grid-cols-2 text-xs text-center">
-                        <div class="space-y-16">
-                            <p>Mengetahui,<br><b>Ketua PD GMH JATIM</b></p>
-                            <div>
-                                <p class="font-bold underline">Jaskia Nur, S.Pd.</p>
-                                <p class="text-gray-400 text-[10px]">NIM. 2022310013</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                            <span class="text-[10px] uppercase font-bold text-amber-700">Target Bulanan PD</span>
+                            <h4 class="text-lg font-bold text-amber-950 mt-1" id="dues-target">Rp 1.500.000</h4>
+                            <p class="text-xs text-amber-800 mt-1">Rp 100.000 per Cabang aktif</p>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                            <span class="text-[10px] uppercase font-bold text-blue-700">Realisasi Tahun Ini</span>
+                            <h4 class="text-lg font-bold text-blue-950 mt-1" id="dues-current-realization">Rp 0</h4>
+                            <p class="text-xs text-blue-800 mt-1">Dari akumulasi seluruh bulan yang melunasi</p>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                            <span class="text-[10px] uppercase font-bold text-gray-600">Total Cabang Aktif</span>
+                            <h4 class="text-lg font-bold text-gray-800 mt-1" id="dues-active-branches">7 PC</h4>
+                            <p class="text-xs text-gray-500 mt-1">Surabaya, Malang, Jember, dll</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-100 rounded-2xl overflow-hidden">
+                        <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
+                            <h3 class="text-xs font-semibold text-gray-700 uppercase">Status Pembayaran Iuran Per Cabang (12 Bulan - Tahun 2026)</h3>
+                            <span class="text-[10px] text-gray-400">Klik status bulan untuk mengubah (Lunas / Belum)</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-100 text-center text-[11px]">
+                                <thead class="bg-white">
+                                    <tr>
+                                        <th class="px-4 py-3 font-semibold text-gray-500 text-left min-w-[120px]">Nama Cabang (PC)</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Jan</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Feb</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Mar</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Apr</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Mei</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Jun</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Jul</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Agu</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Sep</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Okt</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Nov</th>
+                                        <th class="px-1 py-3 font-semibold text-gray-500">Des</th>
+                                        <th class="px-4 py-3 font-semibold text-gray-500 text-right min-w-[100px]">Total Setor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dues-table-body" class="divide-y divide-gray-100 bg-white">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="page-rab" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">Rencana Anggaran Biaya (RAB) Program Kerja</h2>
+                            <p class="text-xs text-gray-500">Monitor kesiapan finansial dan realisasi dana untuk setiap agenda PD GMH JATIM.</p>
+                        </div>
+                        <button onclick="openAddRABModal()" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i> <span>Buat Proyek RAB</span>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="rab-container"></div>
+                </div>
+
+                <div id="page-reports" class="space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">Dokumen & Laporan Keuangan PD GMH JATIM</h2></div>
+                        <div class="flex gap-2">
+                            <button onclick="exportToCSV()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2 border border-gray-200">
+                                <i class="fa-solid fa-file-excel text-green-700"></i> <span>Ekspor ke CSV</span>
+                            </button>
+                            <button onclick="window.print()" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2">
+                                <i class="fa-solid fa-print"></i> <span>Cetak Laporan</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-8" id="report-print-area">
+                        <div class="text-center space-y-2 border-b-2 border-double border-blue-800 pb-6">
+                            <h3 class="text-lg font-bold uppercase tracking-wider text-blue-950">GERAKAN MAHASISWA HIDAYATULLAH</h3>
+                            <h4 class="text-md font-extrabold uppercase text-[#0880a7]">PENGURUS DAERAH JAWA TIMUR</h4>
+                            <p class="text-xs text-gray-500">Sekretariat: Jl. Kejawan Putih Tambak, Mulyorejo, Surabaya, Jawa Timur | Telp: +62 821-4247-6196</p>
+                            <div class="text-xs font-semibold bg-blue-50 text-[#0880a7] py-1 px-3 inline-block rounded-full mt-2">
+                                LAPORAN PERTANGGUNGJAWABAN KEUANGAN KAS TAHUNAN 2026
                             </div>
                         </div>
-                        <div class="space-y-16">
-                            <p><span id="rep-date-place">Surabaya, ...</span><br><b>Bendahara PD GMH JATIM</b></p>
-                            <div>
-                                <p class="font-bold underline" id="rep-treasurer-name">Haidar Ali Ahmad</p>
-                                <p class="text-gray-400 text-[10px]">NIM. 24112667</p>
+
+                        <div class="space-y-4">
+                            <h5 class="font-bold text-sm text-gray-700 uppercase tracking-wide border-b border-gray-100 pb-2"><i class="fa-solid fa-scale-balanced mr-2 text-[#0880a7]"></i>1. Ringkasan Kas Akhir</h5>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                                <div class="bg-gray-50 p-3 rounded-lg">
+                                    <span class="text-gray-400">Total Pemasukan</span>
+                                    <p class="text-sm font-bold text-[#0880a7] mt-1" id="rep-incomes">Rp 0</p>
+                                </div>
+                                <div class="bg-gray-50 p-3 rounded-lg">
+                                    <span class="text-gray-400">Total Pengeluaran</span>
+                                    <p class="text-sm font-bold text-red-700 mt-1" id="rep-expenses">Rp 0</p>
+                                </div>
+                                <div class="bg-gray-50 p-3 rounded-lg">
+                                    <span class="text-gray-400">Kas Bersih Saat Ini</span>
+                                    <p class="text-sm font-bold text-gray-800 mt-1" id="rep-net">Rp 0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h5 class="font-bold text-sm text-gray-700 uppercase tracking-wide border-b border-gray-100 pb-2"><i class="fa-solid fa-list-ol mr-2 text-[#0880a7]"></i>2. Rincian Alur Keluar Masuk Dana</h5>
+                            <table class="min-w-full text-xs text-left">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="py-2 font-bold text-gray-700">Ref</th>
+                                        <th class="py-2 font-bold text-gray-700">Tanggal</th>
+                                        <th class="py-2 font-bold text-gray-700">Keterangan</th>
+                                        <th class="py-2 font-bold text-gray-700 text-right">Debit (Masuk)</th>
+                                        <th class="py-2 font-bold text-gray-700 text-right">Kredit (Keluar)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rep-transactions-body" class="divide-y divide-gray-100">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pt-12 grid grid-cols-2 text-xs text-center">
+                            <div class="space-y-16">
+                                <p>Mengetahui,<br><b>Ketua PD GMH JATIM</b></p>
+                                <div>
+                                    <p class="font-bold underline">Jaskia Nur, S.Pd.</p>
+                                    <p class="text-gray-400 text-[10px]">NIM. 2022310013</p>
+                                </div>
+                            </div>
+                            <div class="space-y-16">
+                                <p><span id="rep-date-place">Surabaya, ...</span><br><b>Bendahara PD GMH JATIM</b></p>
+                                <div>
+                                    <p class="font-bold underline" id="rep-treasurer-name">Haidar Ali Ahmad</p>
+                                    <p class="text-gray-400 text-[10px]">NIM. 24112667</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="page-admin-panel" class="flex flex-col items-center justify-center min-h-[450px] p-4 bg-white hidden">
-                <div class="max-w-md w-full bg-white border border-gray-100 rounded-3xl shadow-sm p-8 text-center space-y-6">
-                    
-                    <div class="mx-auto flex items-center justify-center w-28 h-28 rounded-full bg-blue-50/70">
-                        <div class="flex items-center justify-center w-20 h-20 rounded-full bg-white shadow-md text-4xl text-[#0880a7]">
-                            <i class="fa-solid fa-headset"></i>
+                <div id="page-admin-panel" class="flex flex-col items-center justify-center min-h-[450px] p-4 bg-white hidden">
+                    <div class="max-w-md w-full bg-white border border-gray-100 rounded-3xl shadow-sm p-8 text-center space-y-6">
+                        
+                        <div class="mx-auto flex items-center justify-center w-28 h-28 rounded-full bg-blue-50/70">
+                            <div class="flex items-center justify-center w-20 h-20 rounded-full bg-white shadow-md text-4xl text-[#0880a7]">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="space-y-3">
-                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Pusat Bantuan & Koordinasi Bendahara</h2>
-                        <p class="text-xs text-gray-500 leading-relaxed px-2">
-                            Jika Akhi memerlukan bantuan sinkronisasi akun, validasi token, atau konsultasi pelaporan keuangan tingkat daerah, silakan hubungi Admin Pusat melalui tautan di bawah.
-                        </p>
-                    </div>
-
-                    <div class="bg-gray-50/80 rounded-2xl p-4 border border-gray-100/50 text-left space-y-2">
-                        <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400 block">Jam Operasional Layanan:</span>
-                        <div class="flex items-center space-x-2 text-xs font-semibold text-slate-700">
-                            <i class="fa-regular fa-clock text-[#0880a7] text-sm"></i>
-                            <span>Senin - Sabtu <span class="text-gray-300 mx-1">|</span> 08:00 - 17:00 WIB</span>
+                        <div class="space-y-3">
+                            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Pusat Bantuan & Koordinasi Bendahara</h2>
+                            <p class="text-xs text-gray-500 leading-relaxed px-2">
+                                Jika Akhi memerlukan bantuan sinkronisasi akun, validasi token, atau konsultasi pelaporan keuangan tingkat daerah, silakan hubungi Admin Pusat melalui tautan di bawah.
+                            </p>
                         </div>
-                    </div>
 
-                    <a href="https://wa.me/6282142476196" target="_blank" class="w-full bg-[#0880a7] hover:bg-blue-700 text-white font-semibold text-xs py-3.5 px-4 rounded-xl shadow-md transition duration-200 flex items-center justify-center space-x-2">
-                        <i class="fa-brands fa-whatsapp text-base"></i>
-                        <span>Hubungi WhatsApp Admin</span>
-                    </a>
+                        <div class="bg-gray-50/80 rounded-2xl p-4 border border-gray-100/50 text-left space-y-2">
+                            <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400 block">Jam Operasional Layanan:</span>
+                            <div class="flex items-center space-x-2 text-xs font-semibold text-slate-700">
+                                <i class="fa-regular fa-clock text-[#0880a7] text-sm"></i>
+                                <span>Senin - Sabtu <span class="text-gray-300 mx-1">|</span> 08:00 - 17:00 WIB</span>
+                            </div>
+                        </div>
+
+                        <a href="https://wa.me/6282142476196" target="_blank" class="w-full bg-[#0880a7] hover:bg-blue-700 text-white font-semibold text-xs py-3.5 px-4 rounded-xl shadow-md transition duration-200 flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>Hubungi WhatsApp Admin</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-        </main>
+            </main>
+        </div>
     </div>
 
     <div id="transaction-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
@@ -436,7 +488,6 @@
             <form id="transaction-form" onsubmit="handleTransactionSubmit(event)" class="p-6 space-y-4">
                 <input type="hidden" id="form-tx-id">
                 <input type="hidden" id="form-tx-type">
-
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs text-gray-500 font-semibold mb-1">Tanggal Transaksi</label>
@@ -447,25 +498,19 @@
                         <input type="text" id="form-tx-ref" placeholder="REF/GMH-JTM..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs text-gray-500 font-semibold mb-1">Jumlah Nominal (Rp)</label>
                     <input type="number" id="form-tx-amount" min="1" placeholder="cth: 100000" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-
                 <div>
                     <label class="block text-xs text-gray-500 font-semibold mb-1">Keterangan / Deskripsi</label>
                     <textarea id="form-tx-notes" placeholder="cth: Iuran wajib Cabang Surabaya..." required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"></textarea>
                 </div>
-
                 <div class="flex flex-col space-y-3 bg-blue-50 p-3 rounded-xl border border-blue-100 max-w-md">
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" id="form-tx-receipt" onchange="toggleUploadField()" class="rounded text-[#0880a7] focus:ring-blue-500 w-4 h-4 cursor-pointer">
-                        <label for="form-tx-receipt" class="text-[11px] text-blue-950 font-medium cursor-pointer select-none">
-                            Kwitansi / Bukti Berkas Dokumen Ada
-                        </label>
+                        <label for="form-tx-receipt" class="text-[11px] text-blue-950 font-medium cursor-pointer select-none">Kwitansi / Bukti Berkas Dokumen Ada</label>
                     </div>
-
                     <div id="upload-container" class="hidden border border-dashed border-blue-300 bg-white p-3 rounded-lg flex flex-col items-center justify-center transition-all duration-300">
                         <label for="file-upload" class="cursor-pointer flex flex-col items-center space-y-1 w-full text-center">
                             <i class="fa-solid fa-images text-[#0880a7] text-xl"></i>
@@ -473,12 +518,9 @@
                             <span class="text-[9px] text-gray-400">Bisa memilih lebih dari 1 gambar sekaligus (Maks. 2MB)</span>
                         </label>
                         <input id="file-upload" type="file" class="hidden" accept="image/*" multiple onchange="displayMultipleFileNames(this)">
-                        
-                        <div id="file-name-preview" class="text-[10px] text-left text-blue-900 mt-2 bg-blue-50 p-2 rounded-lg w-full font-medium hidden space-y-1 border border-blue-100">
-                        </div>
+                        <div id="file-name-preview" class="text-[10px] text-left text-blue-900 mt-2 bg-blue-50 p-2 rounded-lg w-full font-medium hidden space-y-1 border border-blue-100"></div>
                     </div>
                 </div>
-
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" onclick="closeTransactionModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-semibold py-2 px-4 rounded-xl transition">Batal</button>
                     <button type="submit" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition shadow">Simpan Transaksi</button>
@@ -498,7 +540,6 @@
                     <label class="block text-xs text-gray-500 font-semibold mb-1">Nama Agenda / Program Kerja</label>
                     <input type="text" id="form-rab-name" placeholder="cth: RAKERWIL IX Jawa Timur" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs text-gray-500 font-semibold mb-1">Target Dana Dibutuhkan</label>
@@ -509,12 +550,10 @@
                         <input type="number" id="form-rab-alloc" placeholder="cth: 1500000" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs text-gray-500 font-semibold mb-1">Total Dana Realisasi (Opsional)</label>
                     <input type="number" id="form-rab-spent" placeholder="0" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" onclick="closeRABModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-semibold py-2 px-4 rounded-xl transition">Batal</button>
                     <button type="submit" class="bg-[#0880a7] hover:bg-blue-700 text-white text-xs font-semibold py-2 px-4 rounded-xl transition shadow">Buat RAB</button>
@@ -592,16 +631,85 @@
                     window.saveSystemDataToCloud();
                 }
                 
-                window.renderDashboard();
-                window.renderTransactions();
-                window.renderReports();
-                window.renderDues();
-                window.renderRAB();
+                // Hanya render jika session login aktif
+                if (sessionStorage.getItem('bendahara_logged_in') === 'true') {
+                    checkLoginSession();
+                }
             });
         });
     </script>
 
     <script>
+        // ===================================================================
+        // KREDENSIAL AKSES PORTAL (Silakan ubah sesuai kebutuhan)
+        // ===================================================================
+        const AUTH_USER = "Admin";
+        const AUTH_PASS = "GMH JATIM"; 
+
+        // Fungsi Memeriksa Status Login saat halaman dimuat
+        function checkLoginSession() {
+            const isLoggedIn = sessionStorage.getItem('bendahara_logged_in');
+            const loginScreen = document.getElementById('login-screen');
+            const mainContent = document.getElementById('main-web-content');
+
+            if (isLoggedIn === 'true') {
+                if(loginScreen) loginScreen.classList.add('hidden');
+                if(mainContent) mainContent.classList.remove('hidden');
+                
+                // Jalankan render website bawaan
+                window.renderDashboard();
+                window.renderTransactions();
+                window.renderDues();
+                window.renderRAB();
+                window.renderReports();
+            } else {
+                if(loginScreen) loginScreen.classList.remove('hidden');
+                if(mainContent) mainContent.classList.add('hidden');
+            }
+        }
+
+        // Fungsi Eksekusi Login Portal
+        function handlePortalLogin(e) {
+            e.preventDefault();
+            const userInp = document.getElementById('login-username').value;
+            const passInp = document.getElementById('login-password').value;
+            const errorAlert = document.getElementById('login-error-msg');
+
+            if (userInp === AUTH_USER && passInp === AUTH_PASS) {
+                sessionStorage.setItem('bendahara_logged_in', 'true');
+                if(errorAlert) errorAlert.classList.add('hidden');
+                checkLoginSession();
+                showToast("Selamat Datang, Akses Diizinkan!");
+            } else {
+                if(errorAlert) errorAlert.classList.remove('hidden');
+                document.getElementById('login-password').value = '';
+            }
+        }
+
+        // Fungsi Log out (Keluar)
+        function handlePortalLogout() {
+            if(confirm("Apakah antum ingin keluar dari sistem keuangan daerah?")) {
+                sessionStorage.removeItem('bendahara_logged_in');
+                checkLoginSession();
+                window.location.reload();
+            }
+        }
+
+        // Lihat/Sembunyikan Password
+        function toggleLoginPassword() {
+            const passField = document.getElementById('login-password');
+            const icon = document.getElementById('lock-icon');
+            if(passField.type === "password") {
+                passField.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passField.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
         window.defaultBranchDues = [
             { id: "PC-SBY", name: "PC Surabaya", jan: true, feb: true, mar: true, apr: true, mei: true, jun: true, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
             { id: "PC-MLG", name: "PC Malang", jan: true, feb: true, mar: true, apr: true, mei: true, jun: false, jul: false, agu: false, sep: false, okt: false, nov: false, des: false },
@@ -627,18 +735,15 @@
         const tanggalFormat = `${tglGlobal.getFullYear()}-${String(tglGlobal.getMonth() + 1).padStart(2, '0')}-${String(tglGlobal.getDate()).padStart(2, '0')}`;
 
         window.onload = function() {
+            // Jalankan validasi session di awal load
+            checkLoginSession();
+
             const opsiFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('current-date-el').innerText = tglGlobal.toLocaleDateString('id-ID', opsiFormat);
             
             const opsiFormatLPJ = { year: 'numeric', month: 'long', day: 'numeric' };
             const datePlace = document.getElementById('rep-date-place');
             if(datePlace) datePlace.innerText = "Surabaya, " + tglGlobal.toLocaleDateString('id-ID', opsiFormatLPJ);
-
-            window.renderDashboard();
-            window.renderTransactions();
-            window.renderDues();
-            window.renderRAB();
-            window.renderReports();
             
             document.getElementById("mobile-menu-toggle").onclick = function(e) {
                 e.stopPropagation();
@@ -950,9 +1055,6 @@
 
         function closeTransactionModal() { document.getElementById('transaction-modal').classList.add('hidden'); }
 
-        // ===================================================================
-        // SUBMIT TRANSAKSI DENGAN INTEGRASI CLOUD RE-FETCH SINKRONISASI AKTIF
-        // ===================================================================
         window.handleTransactionSubmit = async function(e) {
             e.preventDefault();
             const id = document.getElementById('form-tx-id').value;
@@ -970,8 +1072,6 @@
             submitBtn.disabled = true;
 
             let finalImgList = receipt ? currentUploadedImagesArray : [];
-
-            // Simpan cadangan data lama untuk fallback jika cloud gagal
             const backupTransactions = [...window.transactions];
 
             if (id) {
@@ -998,22 +1098,18 @@
             }
 
             try {
-                // KIRIM SINKRONISASI LANGSUNG KE FIREBASE CLOUD DB SERVER
                 if (window.saveSystemDataToCloud) {
                     await window.saveSystemDataToCloud();
-                    
                     closeTransactionModal();
                     showToast("Transaksi Berhasil Disimpan ke Cloud!");
-                    
                     window.renderDashboard();
                     window.renderTransactions();
                     window.renderReports();
                 }
             } catch (err) {
-                console.error("Gagal sinkron data jaringan cloud server:", err);
-                // Kembalikan ke state data sebelum error agar tidak merusak data lokal browser
+                console.error("Gagal sinkron data server:", err);
                 window.transactions = backupTransactions;
-                alert("✕ Gagal Sinkronisasi ke Cloud. Silakan periksa koneksi internet atau kurangi resolusi ukuran foto kwitansi Anda.");
+                alert("✕ Gagal Sinkronisasi ke Cloud. Periksa koneksi internet Anda.");
             } finally {
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
@@ -1033,9 +1129,8 @@
                         window.renderReports();
                     }
                 } catch (err) {
-                    console.error("Gagal menghapus data dari cloud:", err);
                     window.transactions = backupTransactions;
-                    alert("✕ Gagal menghapus data dari Cloud Server. Silakan coba lagi.");
+                    alert("✕ Gagal menghapus data dari Cloud Server.");
                 }
             }
         }
@@ -1070,18 +1165,13 @@
         window.toggleDueStatus = async function(branchId, month) {
             const branch = window.branchDues.find(b => b.id === branchId);
             if (!branch) return;
-            
-            // Toggle status lokal
             branch[month] = !branch[month];
-            
             try {
                 if (window.saveSystemDataToCloud) {
                     await window.saveSystemDataToCloud();
                     window.renderDues();
                 }
             } catch (err) {
-                console.error("Gagal memperbarui status iuran ke cloud:", err);
-                // Kembalikan nilai lokal jika gagal sinkronisasi cloud
                 branch[month] = !branch[month];
                 alert("✕ Gagal menyimpan status iuran ke Cloud Server.");
             }
@@ -1172,7 +1262,7 @@
                 }
             } catch (err) {
                 window.rabProjects.pop();
-                alert("✕ Gagal menyimpan rancangan RAB ke cloud. Silakan periksa kembali koneksi internet Anda.");
+                alert("✕ Gagal menyimpan rancangan RAB ke cloud.");
             }
         }
 
@@ -1233,7 +1323,7 @@
             let csv = "No. Ref,Tanggal,Keterangan,Tipe,Nominal\n" + window.transactions.map(t => `"${t.refNum}","${t.date}","${t.notes}","${t.type==='in'?'Masuk':'Keluar'}",${t.amount}`).join("\n");
             let link = document.createElement("a");
             link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-            link.download = "Laporan_Bendahara_GMH_Jatip.csv";
+            link.download = "Laporan_Bendahara_GMH_Jatim.csv";
             link.click();
         }
 
