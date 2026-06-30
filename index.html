@@ -48,6 +48,10 @@
             header, aside, .md\:hidden, button, .flex.gap-2 {
                 display: none !important;
             }
+            .break-inside-avoid {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
         }
     </style>
 </head>
@@ -369,7 +373,8 @@
                 <div id="page-reports" class="space-y-6 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h2 class="text-xl font-bold text-gray-800">Dokumen & Laporan Keuangan PD GMH JATIM</h2></div>
+                            <h2 class="text-xl font-bold text-gray-800">Dokumen & Laporan Keuangan PD GMH JATIM</h2>
+                        </div>
                         <div class="flex gap-2">
                             <button onclick="exportToCSV()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold py-2 px-4 rounded-xl transition flex items-center space-x-2 border border-gray-200">
                                 <i class="fa-solid fa-file-excel text-green-700"></i> <span>Ekspor ke CSV</span>
@@ -380,12 +385,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-8" id="report-print-area">
-                        <div class="text-center space-y-2 border-b-2 border-double border-blue-800 pb-6">
-                            <h3 class="text-lg font-bold uppercase tracking-wider text-blue-950">GERAKAN MAHASISWA HIDAYATULLAH</h3>
-                            <h4 class="text-md font-extrabold uppercase text-[#0880a7]">PENGURUS DAERAH JAWA TIMUR</h4>
-                            <p class="text-xs text-gray-500">Sekretariat: Jl. Kejawan Putih Tambak, Mulyorejo, Surabaya, Jawa Timur | Telp: +62 821-4247-6196</p>
-                            <div class="text-xs font-semibold bg-blue-50 text-[#0880a7] py-1 px-3 inline-block rounded-full mt-2">
+                    <!-- AREA PRINT LPJ KEUANGAN -->
+                    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-2 sm:p-4 space-y-8" id="report-print-area">
+                        <!-- BAGIAN KOP SURAT BERBENTUK GAMBAR RESMI (GARIS HITAM DIHAPUS DAN MELEKAT KE ATAS) -->
+                        <div class="w-full pt-0 mt-0">
+                            <img src="PD JATIM.jpeg" alt="Kop Surat Resmi PD GMH JATIM" class="w-full h-auto object-contain mx-auto block" onerror="this.src='https://placehold.co/800x150/0880a7/ffffff?text=Kop+Surat+PD+JATIM.jpg+Tidak+Ditemukan'">
+                        </div>
+
+                        <div class="text-center pt-2">
+                            <div class="text-xs font-semibold bg-blue-50 text-[#0880a7] py-1 px-3 inline-block rounded-full">
                                 LAPORAN PERTANGGUNGJAWABAN KEUANGAN KAS TAHUNAN 2026
                             </div>
                         </div>
@@ -425,6 +433,7 @@
                             </table>
                         </div>
 
+                        <!-- KOTAK TANDA TANGAN DENGAN HARI + TANGGAL DINAMIS -->
                         <div class="pt-12 grid grid-cols-2 text-xs text-center">
                             <div class="space-y-16">
                                 <p>Mengetahui,<br><b>Ketua PD GMH JATIM</b></p>
@@ -434,11 +443,18 @@
                                 </div>
                             </div>
                             <div class="space-y-16">
-                                <p><span id="rep-date-place">Surabaya, ...</span><br><b>Bendahara PD GMH JATIM</b></p>
+                                <p><span id="rep-date-place">Memuat Tanggal...</span><br><b>Bendahara PD GMH JATIM</b></p>
                                 <div>
                                     <p class="font-bold underline" id="rep-treasurer-name">Haidar Ali Ahmad</p>
                                     <p class="text-gray-400 text-[10px]">NIM. 24112667</p>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- HALAMAN LAMPIRAN BUKTI TRANSAKSI FISIK -->
+                        <div id="report-attachments-area" class="pt-10 space-y-6" style="page-break-before: always;">
+                            <h5 class="font-bold text-sm text-gray-700 uppercase tracking-wide border-b-2 border-gray-800 pb-2"><i class="fa-solid fa-images mr-2 text-[#0880a7]"></i>3. Lampiran Berkas Bukti Transaksi Asli</h5>
+                            <div id="rep-attachments-gallery" class="grid grid-cols-2 gap-6 pt-4">
                             </div>
                         </div>
                     </div>
@@ -614,7 +630,7 @@
             }
         };
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.documentReadyAndFirebaseInit = function() {
             onSnapshot(doc(db, "database_kas", "sistem_bendahara"), (docSnap) => {
                 if (docSnap.exists() && docSnap.data()) {
                     const dataCloud = docSnap.data();
@@ -631,22 +647,19 @@
                     window.saveSystemDataToCloud();
                 }
                 
-                // Hanya render jika session login aktif
                 if (sessionStorage.getItem('bendahara_logged_in') === 'true') {
                     checkLoginSession();
                 }
             });
-        });
+        }
+
+        window.addEventListener('DOMContentLoaded', window.documentReadyAndFirebaseInit);
     </script>
 
     <script>
-        // ===================================================================
-        // KREDENSIAL AKSES PORTAL (Silakan ubah sesuai kebutuhan)
-        // ===================================================================
         const AUTH_USER = "Admin";
         const AUTH_PASS = "GMH JATIM"; 
 
-        // Fungsi Memeriksa Status Login saat halaman dimuat
         function checkLoginSession() {
             const isLoggedIn = sessionStorage.getItem('bendahara_logged_in');
             const loginScreen = document.getElementById('login-screen');
@@ -656,7 +669,6 @@
                 if(loginScreen) loginScreen.classList.add('hidden');
                 if(mainContent) mainContent.classList.remove('hidden');
                 
-                // Jalankan render website bawaan
                 window.renderDashboard();
                 window.renderTransactions();
                 window.renderDues();
@@ -668,7 +680,6 @@
             }
         }
 
-        // Fungsi Eksekusi Login Portal
         function handlePortalLogin(e) {
             e.preventDefault();
             const userInp = document.getElementById('login-username').value;
@@ -686,7 +697,6 @@
             }
         }
 
-        // Fungsi Log out (Keluar)
         function handlePortalLogout() {
             if(confirm("Apakah antum ingin keluar dari sistem keuangan daerah?")) {
                 sessionStorage.removeItem('bendahara_logged_in');
@@ -695,7 +705,6 @@
             }
         }
 
-        // Lihat/Sembunyikan Password
         function toggleLoginPassword() {
             const passField = document.getElementById('login-password');
             const icon = document.getElementById('lock-icon');
@@ -735,13 +744,13 @@
         const tanggalFormat = `${tglGlobal.getFullYear()}-${String(tglGlobal.getMonth() + 1).padStart(2, '0')}-${String(tglGlobal.getDate()).padStart(2, '0')}`;
 
         window.onload = function() {
-            // Jalankan validasi session di awal load
             checkLoginSession();
 
             const opsiFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('current-date-el').innerText = tglGlobal.toLocaleDateString('id-ID', opsiFormat);
             
-            const opsiFormatLPJ = { year: 'numeric', month: 'long', day: 'numeric' };
+            // Format Hari, Tanggal, Bulan, Tahun untuk Kolom TTD LPJ
+            const opsiFormatLPJ = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             const datePlace = document.getElementById('rep-date-place');
             if(datePlace) datePlace.innerText = "Surabaya, " + tglGlobal.toLocaleDateString('id-ID', opsiFormatLPJ);
             
@@ -910,7 +919,7 @@
             const ctx = canvas.getContext('2d');
             if (cashflowChartObj) cashflowChartObj.destroy();
 
-            const sortedTx = [...window.transactions].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const sortedTx = [...window.transactions].sort((a,b) => new Date(b.date) - new Date(b.date));
             let akumulasiMap = {};
             let akumulasiSaldo = 0;
 
@@ -1284,9 +1293,14 @@
 
         window.renderReports = function() {
             const tbody = document.getElementById('rep-transactions-body');
+            const galleryContainer = document.getElementById('rep-attachments-gallery');
+            const attachmentsArea = document.getElementById('report-attachments-area');
+            
             if(!tbody) return;
             tbody.innerHTML = '';
             
+            if(galleryContainer) galleryContainer.innerHTML = '';
+
             let incomesSum = window.transactions.filter(t => t.type === 'in').reduce((sum, t) => sum + t.amount, 0);
             let expensesSum = window.transactions.filter(t => t.type === 'out').reduce((sum, t) => sum + t.amount, 0);
             let totalKas = incomesSum - expensesSum;
@@ -1299,6 +1313,8 @@
             if(re) re.innerText = formatRupiah(expensesSum);
             if(rn) rn.innerText = formatRupiah(totalKas);
 
+            let hasAnyImages = false;
+
             window.transactions.forEach(t => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 text-xs";
@@ -1310,7 +1326,31 @@
                     <td class="text-right font-bold text-red-700">${t.type==='out'?formatRupiah(t.amount):'-'}</td>
                 `;
                 tbody.appendChild(tr);
+
+                if (t.receipt && t.imgDataList && t.imgDataList.length > 0 && galleryContainer) {
+                    hasAnyImages = true;
+                    t.imgDataList.forEach((base64Src, index) => {
+                        const itemWrapper = document.createElement('div');
+                        itemWrapper.className = "border border-gray-200 p-3 rounded-xl bg-gray-50 flex flex-col items-center space-y-2 break-inside-avoid";
+                        itemWrapper.innerHTML = `
+                            <div class="text-[10px] font-bold text-slate-700 text-center uppercase tracking-wide">
+                                Bukti Ref: ${t.refNum || '-'} <br>
+                                <span class="text-gray-500 font-medium normal-case">${t.notes}</span>
+                            </div>
+                            <img src="${base64Src}" class="max-h-64 max-w-full object-contain rounded-lg border border-gray-300 shadow-sm">
+                        `;
+                        galleryContainer.appendChild(itemWrapper);
+                    });
+                }
             });
+
+            if (attachmentsArea) {
+                if (hasAnyImages) {
+                    attachmentsArea.classList.remove('hidden');
+                } else {
+                    attachmentsArea.classList.add('hidden');
+                }
+            }
         }
 
         function resetTxFilters() {
